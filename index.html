@@ -405,27 +405,311 @@
     const SHEET_ID = "1itXhVRyvzQAWdMHMUU1Z2ebdmWYfpXjo3k0At1eXyZc";
     const SHEET_GID = "0";
 
-    const FALLBACK_DATA = {
-      deity: "邱大仙",
-      ganzhi: "丙午",
-      year: "二零二六",
-      month: "八",
-      day: "廿三、廿四",
-      days: "二",
-      className: "全球線上國高中身心靈健康體驗營第10期",
-      organizer: "寶光崇正 道務中心",
-      supervisor: "黃 老樞紐 上 世 下 姸 / 翁 樞紐 上 嵩 下 慶",
-      mainLeader: "弟子 翁瑋鍼",
-      leaders: "翁點傳師甄聯/林講師佳融/周瑋倫小組長",
-      studentM: "42",
-      studentF: "58",
-      studentT: "100",
-      leaderM: "",
-      leaderF: "",
-      leaderT: "0",
-      insideM: "7",
-      insideF: "9",
-      outsideM: "3",
-      outsideF: "6",
-      totalM: "52",
-      t
+    function txt(v){
+      return v == null ? "" : String(v).trim();
+    }
+
+    const CELL_MAP = {
+      deity: "A3",
+      ganzhi: "B4",
+      year: "D4",
+      month: "D5",
+      day: "D6",
+      days: "D7",
+      className: "C8",
+      organizerRaw: "C9",
+      supervisor: "C10",
+      mainLeader: "C11",
+      leaders1: "C12",
+      leaders2: "C13",
+      studentM: "C14",
+      studentF: "C15",
+      studentT: "C16",
+      leaderM: "C18",
+      leaderF: "C19",
+      leaderT: "C20",
+      insideM: "C22",
+      insideF: "C23",
+      outsideM: "C25",
+      outsideF: "C26",
+      totalM: "C28",
+      totalF: "C29",
+      grandTotal: "C31",
+      signer: "C33",
+      sick: "C36",
+      personal: "C37",
+      courses: "C39"
+    };
+
+    function getSingleCellJsonp(a1){
+      return new Promise((resolve,reject)=>{
+        const callbackName = "__sheetCell_" + a1.replace(/[^A-Z0-9]/gi,"_") + "_" + Date.now() + "_" + Math.floor(Math.random()*100000);
+        const script = document.createElement("script");
+
+        const timeout = setTimeout(()=>{
+          cleanup();
+          reject(new Error("讀取 " + a1 + " 逾時"));
+        },10000);
+
+        function cleanup(){
+          clearTimeout(timeout);
+          try{ delete window[callbackName]; }catch(e){ window[callbackName] = undefined; }
+          if(script.parentNode) script.parentNode.removeChild(script);
+        }
+
+        window[callbackName] = function(json){
+          cleanup();
+          try{
+            const rows = json && json.table && json.table.rows ? json.table.rows : [];
+            const cell = rows[0] && rows[0].c ? rows[0].c[0] : null;
+            if(!cell){
+              resolve("");
+              return;
+            }
+            const value = cell.f != null ? cell.f : cell.v;
+            resolve(value == null ? "" : String(value).trim());
+          }catch(err){
+            reject(err);
+          }
+        };
+
+        script.onerror = function(){
+          cleanup();
+          reject(new Error("讀取 " + a1 + " 失敗"));
+        };
+
+        script.src =
+          "https://docs.google.com/spreadsheets/d/" + SHEET_ID +
+          "/gviz/tq?tqx=out:json;responseHandler:" + callbackName +
+          "&gid=" + SHEET_GID +
+          "&range=" + encodeURIComponent(a1) +
+          "&headers=0&_=" + Date.now();
+
+        document.head.appendChild(script);
+      });
+    }
+
+    async function readLiveSheetData(){
+      const entries = Object.entries(CELL_MAP);
+      const values = await Promise.all(
+        entries.map(async ([key,a1]) => [key, await getSingleCellJsonp(a1)])
+      );
+
+      const raw = Object.fromEntries(values);
+
+      return {
+        deity: raw.deity,
+        ganzhi: raw.ganzhi,
+        year: raw.year,
+        month: raw.month,
+        day: raw.day,
+        days: raw.days,
+        className: raw.className,
+        organizer: raw.organizerRaw ? ("寶光崇正 " + raw.organizerRaw).trim() : "",
+        supervisor: raw.supervisor,
+        mainLeader: raw.mainLeader,
+        leaders: [raw.leaders1,raw.leaders2].filter(Boolean).join("\n"),
+        studentM: raw.studentM,
+        studentF: raw.studentF,
+        studentT: raw.studentT,
+        leaderM: raw.leaderM,
+        leaderF: raw.leaderF,
+        leaderT: raw.leaderT,
+        insideM: raw.insideM,
+        insideF: raw.insideF,
+        outsideM: raw.outsideM,
+        outsideF: raw.outsideF,
+        totalM: raw.totalM,
+        totalF: raw.totalF,
+        grandTotal: raw.grandTotal,
+        signer: raw.signer,
+        sick: raw.sick,
+        personal: raw.personal,
+        courses: raw.courses
+      };
+    }
+
+    function setText(id,value){
+      const el = document.getElementById(id);
+      if(el) el.textContent = value || "";
+    }
+
+    function parseLeave(raw){
+      if(!raw || !raw.trim()) return [];
+      return raw
+        .replace(/\r/g,"")
+        .split(/\n+/)
+        .map(line => line.trim())
+        .filter(Boolean)
+        .map(line => {
+          const parts = line.split(/\t+/).map(s=>s.trim()).filter(Boolean);
+          if(parts.length >= 3) return parts[0] + " " + parts[1] + " " + parts.slice(2).join(" ");
+          return line.replace(/\s{2,}/g," ");
+        });
+    }
+
+    function renderLeave(id,raw){
+      const el = document.getElementById(id);
+      el.innerHTML = "";
+      const items = parseLeave(raw);
+
+      if(!items.length){
+        const empty = document.createElement("div");
+        empty.className = "leave-empty";
+        empty.textContent = "—";
+        el.appendChild(empty);
+        return;
+      }
+
+      const count = items.length;
+      const cols = count > 70 ? 11 : count > 55 ? 10 : count > 40 ? 9 : count > 24 ? 8 : 6;
+      const size = count > 70 ? 15.5 : count > 55 ? 16.5 : count > 40 ? 17 : 18;
+      el.style.gridTemplateColumns = "repeat(" + cols + ", minmax(0,1fr))";
+      el.style.fontSize = size + "px";
+
+      items.forEach(item=>{
+        const div = document.createElement("div");
+        div.className = "leave-item";
+        div.textContent = item;
+        el.appendChild(div);
+      });
+    }
+
+    function splitTitleSpeaker(line){
+      line = line.trim();
+      if(!line) return null;
+      const parts = line.split(/\s{2,}/).map(s=>s.trim()).filter(Boolean);
+      if(parts.length >= 2){
+        return {title:parts[0], speaker:parts.slice(1).join(" ")};
+      }
+      return {title:line,speaker:""};
+    }
+
+    function parseCourses(raw){
+      if(!raw || !raw.trim()) return [];
+      const base = raw.replace(/\r/g,"").split(/\n+/).map(s=>s.trim()).filter(Boolean);
+      const out = [];
+
+      base.forEach(line=>{
+        const q = line.indexOf("？");
+        if(q >= 0 && q < line.length-1){
+          const first = line.slice(0,q+1).trim();
+          const rest = line.slice(q+1).trim();
+          const a = splitTitleSpeaker(first);
+          const b = splitTitleSpeaker(rest);
+          if(a) out.push(a);
+          if(b) out.push(b);
+        }else{
+          const item = splitTitleSpeaker(line);
+          if(item) out.push(item);
+        }
+      });
+
+      for(let i=0;i<out.length;i++){
+        if(!out[i].speaker){
+          const next = out.slice(i+1).find(x=>x.speaker);
+          if(next && next.speaker === "各地幹部") out[i].speaker = next.speaker;
+        }
+      }
+      return out;
+    }
+
+    function renderCourses(raw){
+      const el = document.getElementById("courseList");
+      el.innerHTML = "";
+      const rows = parseCourses(raw);
+
+      rows.forEach(item=>{
+        const row = document.createElement("div");
+        row.className = "course-row";
+
+        const title = document.createElement("div");
+        title.textContent = item.title;
+
+        const speaker = document.createElement("div");
+        speaker.className = "course-speaker";
+        speaker.textContent = item.speaker;
+
+        row.appendChild(title);
+        row.appendChild(speaker);
+        el.appendChild(row);
+      });
+    }
+
+    function clearRender(){
+      [
+        "deity","ganzhi","year","month","day","days","className","organizer",
+        "supervisor","mainLeader","leaders","studentM","studentF","studentT",
+        "leaderM","leaderF","leaderT","insideM","insideF","outsideM","outsideF",
+        "totalM","totalF","grandTotal","signer"
+      ].forEach(key=>setText(key,""));
+
+      renderCourses("");
+      renderLeave("sickList","");
+      renderLeave("personalList","");
+      fitStage();
+    }
+
+    function render(data){
+      [
+        "deity","ganzhi","year","month","day","days","className","organizer",
+        "supervisor","mainLeader","leaders","studentM","studentF","studentT",
+        "leaderM","leaderF","leaderT","insideM","insideF","outsideM","outsideF",
+        "totalM","totalF","grandTotal","signer"
+      ].forEach(key=>setText(key,data[key]));
+
+      renderCourses(data.courses);
+      renderLeave("sickList",data.sick);
+      renderLeave("personalList",data.personal);
+      fitStage();
+    }
+
+    function fitStage(){
+      const stage = document.getElementById("stage");
+      stage.style.transform = "scale(1)";
+      const scale = Math.min(
+        window.innerWidth / stage.offsetWidth,
+        window.innerHeight / stage.offsetHeight
+      ) * .995;
+      stage.style.transform = "scale(" + scale + ")";
+    }
+
+    let sheetRefreshTimer = null;
+
+    function setSourceStatus(text,type){
+      const status = document.getElementById("source-status");
+      status.textContent = text;
+      status.className = type || "";
+    }
+
+    async function refreshFromSheet(){
+      setSourceStatus("● 正在同步 Google Sheet…","");
+      try{
+        const live = await readLiveSheetData();
+
+        if(!live.className){
+          throw new Error("班名 C8 為空白");
+        }
+
+        render(live);
+
+        const now = new Date();
+        const hh = String(now.getHours()).padStart(2,"0");
+        const mm = String(now.getMinutes()).padStart(2,"0");
+        const ss = String(now.getSeconds()).padStart(2,"0");
+
+        setSourceStatus("● Sheet 已同步 " + hh + ":" + mm + ":" + ss,"ok");
+      }catch(err){
+        console.error("Sheet sync failed:",err);
+        clearRender();
+        setSourceStatus("⚠ Sheet 同步失敗｜未顯示舊資料","err");
+      }
+    }
+
+    clearRender();
+    refreshFromSheet();
+    sheetRefreshTimer = setInterval(refreshFromSheet,30000);
+    window.addEventListener("resize",fitStage);
+  </script>
+</body>
+</html>
