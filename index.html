@@ -344,12 +344,6 @@
             <td>計 <span id="studentT" class="num"></span> 名</td>
           </tr>
           <tr>
-            <td class="stats-label">小 班 長：</td>
-            <td>乾 <span id="leaderM" class="num"></span> 名</td>
-            <td>坤 <span id="leaderF" class="num"></span> 名</td>
-            <td>計 <span id="leaderT" class="num"></span> 名</td>
-          </tr>
-          <tr>
             <td class="stats-label">班內服務：</td>
             <td>乾 <span id="insideM" class="num"></span> 名</td>
             <td>坤 <span id="insideF" class="num"></span> 名</td>
@@ -402,8 +396,8 @@
   </main>
 
   <script>
-    const SHEET_ID = "1itXhVRyvzQAWdMHMUU1Z2ebdmWYfpXjo3k0At1eXyZc";
-    const SHEET_GID = "0";
+    const SHEET_ID = "1Yd08hsd9fqtnf5UkuRi9vJAGAb6YF-L15Z6faSy5FMc";
+    const SHEET_GID = "1392157113";
 
     function txt(v){
       return v == null ? "" : String(v).trim();
@@ -422,6 +416,8 @@
       mainLeader: "C11",
       leaders1: "C12",
       leaders2: "C13",
+      leaders3: "D13",
+      leaders4: "E13",
       studentM: "C14",
       studentF: "C15",
       studentT: "C16",
@@ -508,7 +504,7 @@
         organizer: raw.organizerRaw ? ("寶光崇正 " + raw.organizerRaw).trim() : "",
         supervisor: raw.supervisor,
         mainLeader: raw.mainLeader,
-        leaders: [raw.leaders1,raw.leaders2].filter(Boolean).join("\n"),
+        leaders: [raw.leaders1,raw.leaders2,raw.leaders3,raw.leaders4].filter(Boolean).join("\n"),
         studentM: raw.studentM,
         studentF: raw.studentF,
         studentT: raw.studentT,
