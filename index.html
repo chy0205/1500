@@ -1,711 +1,711 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-  <title>呈奏呈報表</title>
-  <style>
-    :root{
-      --gold:#f2cf08;
-      --red:#c90000;
-      --deep-red:#a80000;
-      --blue:#063dff;
-      --ink:#111;
-      --stage-w:1600px;
-      --stage-h:900px;
-    }
-
-    *{box-sizing:border-box}
-
-    html,body{
-      margin:0;
-      width:100%;
-      height:100%;
-      overflow:hidden;
-      background:var(--gold);
-      color:var(--ink);
-      font-family:"DFKai-SB","BiauKai","KaiTi","標楷體",serif;
-    }
-
-    body{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-
-    #stage{
-      width:var(--stage-w);
-      height:var(--stage-h);
-      padding:28px 42px 20px;
-      position:relative;
-      transform-origin:center center;
-      overflow:hidden;
-      background:var(--gold);
-    }
-
-    .red{color:var(--red);font-weight:700}
-    .blue{color:var(--blue);font-weight:700}
-
-    .hero{
-      height:176px;
-      text-align:center;
-    }
-
-    .title{
-      margin:0;
-      color:var(--red);
-      font-size:58px;
-      line-height:1;
-      letter-spacing:.88em;
-      padding-left:.88em;
-      font-weight:700;
-    }
-
-    .deity{
-      margin-top:13px;
-      font-size:27px;
-      line-height:1.1;
-    }
-
-    .date-row{
-      margin-top:14px;
-      font-size:26px;
-      line-height:1.2;
-      white-space:nowrap;
-      text-align:center;
-    }
-
-    .major-rule{
-      position:relative;
-      height:16px;
-      border-top:3px solid var(--red);
-      margin-top:10px;
-    }
-
-    .top-grid{
-      display:grid;
-      grid-template-columns:1.08fr .92fr;
-      gap:38px;
-      height:326px;
-    }
-
-    .section{
-      min-width:0;
-    }
-
-    .section-head{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      height:42px;
-      margin-bottom:7px;
-    }
-
-    .section-badge{
-      flex:0 0 auto;
-      min-width:174px;
-      padding:5px 18px 6px;
-      border-radius:15px;
-      background:var(--deep-red);
-      border:2px solid var(--red);
-      box-shadow:inset 0 0 0 2px #ffd962;
-      color:#fff6b6;
-      font-size:24px;
-      line-height:1.05;
-      text-align:center;
-      font-weight:700;
-      letter-spacing:.06em;
-    }
-
-    .section-head::after{
-      content:"";
-      height:2px;
-      background:var(--red);
-      flex:1;
-    }
-
-    .class-info{
-      padding-right:10px;
-    }
-
-    .class-table,
-    .stats-table{
-      width:100%;
-      border-collapse:collapse;
-      table-layout:fixed;
-    }
-
-    .class-table{
-      font-size:23px;
-      line-height:1.30;
-    }
-
-    .class-table td{
-      padding:4px 0;
-      vertical-align:top;
-    }
-
-    .class-label{
-      width:150px;
-      white-space:nowrap;
-      color:var(--ink);
-    }
-
-    .class-value{
-      color:var(--blue);
-      font-weight:700;
-      word-break:keep-all;
-      overflow-wrap:anywhere;
-    }
-
-    .stats{
-      padding-left:28px;
-      border-left:2px solid var(--red);
-      position:relative;
-    }
-
-    .stats-table{
-      font-size:24px;
-      line-height:1.25;
-    }
-
-    .stats-table td{
-      height:40px;
-      padding:4px 3px;
-      vertical-align:middle;
-      white-space:nowrap;
-    }
-
-    .stats-label{width:150px}
-
-    .num{
-      color:var(--blue);
-      font-weight:700;
-      font-size:31px;
-      display:inline-block;
-      min-width:38px;
-      text-align:center;
-    }
-
-    .courses{
-      height:112px;
-      margin-top:2px;
-      overflow:hidden;
-    }
-
-    .courses .section-head{
-      margin-bottom:1px;
-    }
-
-    .course-list{
-      margin-left:205px;
-      margin-top:-3px;
-      display:grid;
-      row-gap:1px;
-    }
-
-    .course-row{
-      display:grid;
-      grid-template-columns:minmax(0,1fr) 170px;
-      gap:18px;
-      align-items:baseline;
-      font-size:23px;
-      line-height:1.28;
-      color:var(--blue);
-      font-weight:700;
-      max-width:930px;
-    }
-
-    .course-speaker{
-      white-space:nowrap;
-    }
-
-    .notes{
-      height:224px;
-      overflow:hidden;
-      position:relative;
-      padding-bottom:42px;
-    }
-
-    .notes .section-head{
-      margin-bottom:5px;
-    }
-
-    .leave-row{
-      display:grid;
-      grid-template-columns:92px 1fr;
-      align-items:start;
-      column-gap:8px;
-      margin-bottom:4px;
-    }
-
-    .leave-label{
-      font-size:21px;
-      line-height:1.3;
-      font-weight:700;
-      white-space:nowrap;
-    }
-
-    .leave-grid{
-      display:grid;
-      grid-template-columns:repeat(10,minmax(0,1fr));
-      gap:2px 9px;
-      color:var(--blue);
-      font-weight:700;
-      font-size:17px;
-      line-height:1.25;
-      min-width:0;
-    }
-
-    .leave-item{
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:clip;
-    }
-
-    .leave-empty{
-      color:var(--ink);
-      font-weight:400;
-      font-size:19px;
-    }
-
-    .signature{
-      position:absolute;
-      right:6px;
-      bottom:4px;
-      font-size:24px;
-      line-height:1;
-      white-space:nowrap;
-      text-align:right;
-    }
-
-    #source-status{
-      position:absolute;
-      left:12px;
-      bottom:8px;
-      font-family:Arial,"Noto Sans TC",sans-serif;
-      font-size:13px;
-      color:#333;
-      background:rgba(255,255,255,.58);
-      border:1px solid rgba(0,0,0,.16);
-      border-radius:10px;
-      padding:4px 9px;
-      user-select:none;
-      z-index:20;
-    }
-
-    #source-status.ok{ color:#075f1d; }
-    #source-status.err{ color:#9a1111; }
-
-    @media(max-aspect-ratio:16/9){
-      /* scaling handled by JS */
-    }
-  </style>
-</head>
-<body>
-  <main id="stage">
-    <header class="hero">
-      <h1 class="title">呈　奏</h1>
-      <div class="deity">
-        <span id="deity" class="red"></span>　<span>大慈大悲</span>
-      </div>
-      <div class="date-row">
-        天運歲次 <span id="ganzhi" class="red"></span> 年　
-        西元 <span id="year" class="red"></span> 年　
-        <span id="month" class="red"></span> 月　
-        <span id="day" class="red"></span> 日　
-        為期 <span id="days" class="red"></span> 天
-      </div>
-      <div class="major-rule"></div>
-    </header>
-
-    <section class="top-grid">
-      <div class="section class-info">
-        <div class="section-head"><div class="section-badge">班務資訊</div></div>
-        <table class="class-table">
-          <tr><td class="class-label">班　　名：</td><td id="className" class="class-value"></td></tr>
-          <tr><td class="class-label">主辦單位：</td><td id="organizer" class="class-value"></td></tr>
-          <tr><td class="class-label">監　　班：</td><td id="supervisor" class="class-value"></td></tr>
-          <tr><td class="class-label">主　　班：</td><td id="mainLeader" class="class-value"></td></tr>
-          <tr><td class="class-label">領　　班：</td><td id="leaders" class="class-value"></td></tr>
-        </table>
-      </div>
-
-      <div class="section stats">
-        <div class="section-head"><div class="section-badge">人數統計</div></div>
-        <table class="stats-table">
-          <tr>
-            <td class="stats-label">班　　員：</td>
-            <td>乾 <span id="studentM" class="num"></span> 名</td>
-            <td>坤 <span id="studentF" class="num"></span> 名</td>
-            <td>計 <span id="studentT" class="num"></span> 名</td>
-          </tr>
-          <tr>
-            <td class="stats-label">班內服務：</td>
-            <td>乾 <span id="insideM" class="num"></span> 名</td>
-            <td>坤 <span id="insideF" class="num"></span> 名</td>
-            <td></td>
-          </tr>
-          <tr>
-            <td class="stats-label">班外服務：</td>
-            <td>乾 <span id="outsideM" class="num"></span> 名</td>
-            <td>坤 <span id="outsideF" class="num"></span> 名</td>
-            <td></td>
-          </tr>
-          <tr>
-            <td class="stats-label">合　　計：</td>
-            <td>乾 <span id="totalM" class="num"></span> 名</td>
-            <td>坤 <span id="totalF" class="num"></span> 名</td>
-            <td></td>
-          </tr>
-          <tr>
-            <td class="stats-label">共　　計：</td>
-            <td colspan="3">乾坤 <span id="grandTotal" class="num"></span> 名</td>
-          </tr>
-        </table>
-      </div>
-    </section>
-
-    <section class="section courses">
-      <div class="section-head"><div class="section-badge">今日人事課程</div></div>
-      <div id="courseList" class="course-list"></div>
-    </section>
-
-    <section class="section notes">
-      <div class="section-head"><div class="section-badge">備註（請假名單）</div></div>
-
-      <div class="leave-row">
-        <div class="leave-label">病　假：</div>
-        <div id="sickList" class="leave-grid"></div>
-      </div>
-
-      <div class="leave-row">
-        <div class="leave-label">事　假：</div>
-        <div id="personalList" class="leave-grid"></div>
-      </div>
-
-      <div class="signature">
-        弟子　<span id="signer" class="blue"></span>　叩呈
-      </div>
-    </section>
-
-    <div id="source-status"></div>
-  </main>
-
-  <script>
-    const SHEET_ID = "1Yd08hsd9fqtnf5UkuRi9vJAGAb6YF-L15Z6faSy5FMc";
-    const SHEET_GID = "1392157113";
-
-    function txt(v){
-      return v == null ? "" : String(v).trim();
-    }
-
-    const CELL_MAP = {
-      deity: "A3",
-      ganzhi: "B4",
-      year: "D4",
-      month: "D5",
-      day: "D6",
-      days: "D7",
-      className: "C8",
-      organizerRaw: "C9",
-      supervisor: "C10",
-      mainLeader: "C11",
-      leaders1: "C12",
-      leaders2: "C13",
-      leaders3: "D13",
-      leaders4: "E13",
-      studentM: "C14",
-      studentF: "C15",
-      studentT: "C16",
-      leaderM: "C18",
-      leaderF: "C19",
-      leaderT: "C20",
-      insideM: "C22",
-      insideF: "C23",
-      outsideM: "C25",
-      outsideF: "C26",
-      totalM: "C28",
-      totalF: "C29",
-      grandTotal: "C31",
-      signer: "C33",
-      sick: "C36",
-      personal: "C37",
-      courses: "C39"
-    };
-
-    function getSingleCellJsonp(a1){
-      return new Promise((resolve,reject)=>{
-        const callbackName = "__sheetCell_" + a1.replace(/[^A-Z0-9]/gi,"_") + "_" + Date.now() + "_" + Math.floor(Math.random()*100000);
-        const script = document.createElement("script");
-
-        const timeout = setTimeout(()=>{
-          cleanup();
-          reject(new Error("讀取 " + a1 + " 逾時"));
-        },10000);
-
-        function cleanup(){
-          clearTimeout(timeout);
-          try{ delete window[callbackName]; }catch(e){ window[callbackName] = undefined; }
-          if(script.parentNode) script.parentNode.removeChild(script);
-        }
-
-        window[callbackName] = function(json){
-          cleanup();
-          try{
-            const rows = json && json.table && json.table.rows ? json.table.rows : [];
-            const cell = rows[0] && rows[0].c ? rows[0].c[0] : null;
-            if(!cell){
-              resolve("");
-              return;
-            }
-            const value = cell.f != null ? cell.f : cell.v;
-            resolve(value == null ? "" : String(value).trim());
-          }catch(err){
-            reject(err);
-          }
-        };
-
-        script.onerror = function(){
-          cleanup();
-          reject(new Error("讀取 " + a1 + " 失敗"));
-        };
-
-        script.src =
-          "https://docs.google.com/spreadsheets/d/" + SHEET_ID +
-          "/gviz/tq?tqx=out:json;responseHandler:" + callbackName +
-          "&gid=" + SHEET_GID +
-          "&range=" + encodeURIComponent(a1) +
-          "&headers=0&_=" + Date.now();
-
-        document.head.appendChild(script);
-      });
-    }
-
-    async function readLiveSheetData(){
-      const entries = Object.entries(CELL_MAP);
-      const values = await Promise.all(
-        entries.map(async ([key,a1]) => [key, await getSingleCellJsonp(a1)])
-      );
-
-      const raw = Object.fromEntries(values);
-
-      return {
-        deity: raw.deity,
-        ganzhi: raw.ganzhi,
-        year: raw.year,
-        month: raw.month,
-        day: raw.day,
-        days: raw.days,
-        className: raw.className,
-        organizer: raw.organizerRaw ? ("寶光崇正 " + raw.organizerRaw).trim() : "",
-        supervisor: raw.supervisor,
-        mainLeader: raw.mainLeader,
-        leaders: [raw.leaders1,raw.leaders2,raw.leaders3,raw.leaders4].filter(Boolean).join("\n"),
-        studentM: raw.studentM,
-        studentF: raw.studentF,
-        studentT: raw.studentT,
-        leaderM: raw.leaderM,
-        leaderF: raw.leaderF,
-        leaderT: raw.leaderT,
-        insideM: raw.insideM,
-        insideF: raw.insideF,
-        outsideM: raw.outsideM,
-        outsideF: raw.outsideF,
-        totalM: raw.totalM,
-        totalF: raw.totalF,
-        grandTotal: raw.grandTotal,
-        signer: raw.signer,
-        sick: raw.sick,
-        personal: raw.personal,
-        courses: raw.courses
-      };
-    }
-
-    function setText(id,value){
-      const el = document.getElementById(id);
-      if(el) el.textContent = value || "";
-    }
-
-    function parseLeave(raw){
-      if(!raw || !raw.trim()) return [];
-      return raw
-        .replace(/\r/g,"")
-        .split(/\n+/)
-        .map(line => line.trim())
-        .filter(Boolean)
-        .map(line => {
-          const parts = line.split(/\t+/).map(s=>s.trim()).filter(Boolean);
-          if(parts.length >= 3) return parts[0] + " " + parts[1] + " " + parts.slice(2).join(" ");
-          return line.replace(/\s{2,}/g," ");
-        });
-    }
-
-    function renderLeave(id,raw){
-      const el = document.getElementById(id);
-      el.innerHTML = "";
-      const items = parseLeave(raw);
-
-      if(!items.length){
-        const empty = document.createElement("div");
-        empty.className = "leave-empty";
-        empty.textContent = "—";
-        el.appendChild(empty);
-        return;
-      }
-
-      const count = items.length;
-      const cols = count > 70 ? 11 : count > 55 ? 10 : count > 40 ? 9 : count > 24 ? 8 : 6;
-      const size = count > 70 ? 15.5 : count > 55 ? 16.5 : count > 40 ? 17 : 18;
-      el.style.gridTemplateColumns = "repeat(" + cols + ", minmax(0,1fr))";
-      el.style.fontSize = size + "px";
-
-      items.forEach(item=>{
-        const div = document.createElement("div");
-        div.className = "leave-item";
-        div.textContent = item;
-        el.appendChild(div);
-      });
-    }
-
-    function splitTitleSpeaker(line){
-      line = line.trim();
-      if(!line) return null;
-      const parts = line.split(/\s{2,}/).map(s=>s.trim()).filter(Boolean);
-      if(parts.length >= 2){
-        return {title:parts[0], speaker:parts.slice(1).join(" ")};
-      }
-      return {title:line,speaker:""};
-    }
-
-    function parseCourses(raw){
-      if(!raw || !raw.trim()) return [];
-      const base = raw.replace(/\r/g,"").split(/\n+/).map(s=>s.trim()).filter(Boolean);
-      const out = [];
-
-      base.forEach(line=>{
-        const q = line.indexOf("？");
-        if(q >= 0 && q < line.length-1){
-          const first = line.slice(0,q+1).trim();
-          const rest = line.slice(q+1).trim();
-          const a = splitTitleSpeaker(first);
-          const b = splitTitleSpeaker(rest);
-          if(a) out.push(a);
-          if(b) out.push(b);
-        }else{
-          const item = splitTitleSpeaker(line);
-          if(item) out.push(item);
-        }
-      });
-
-      for(let i=0;i<out.length;i++){
-        if(!out[i].speaker){
-          const next = out.slice(i+1).find(x=>x.speaker);
-          if(next && next.speaker === "各地幹部") out[i].speaker = next.speaker;
-        }
-      }
-      return out;
-    }
-
-    function renderCourses(raw){
-      const el = document.getElementById("courseList");
-      el.innerHTML = "";
-      const rows = parseCourses(raw);
-
-      rows.forEach(item=>{
-        const row = document.createElement("div");
-        row.className = "course-row";
-
-        const title = document.createElement("div");
-        title.textContent = item.title;
-
-        const speaker = document.createElement("div");
-        speaker.className = "course-speaker";
-        speaker.textContent = item.speaker;
-
-        row.appendChild(title);
-        row.appendChild(speaker);
-        el.appendChild(row);
-      });
-    }
-
-    function clearRender(){
-      [
+<!DOCTYPE html> <!-- 宣告此文件為 HTML5 標準文件格式 -->
+<html lang="zh-TW"> <!-- HTML 根標籤，設定網頁主要語言為繁體中文 -->
+<head> <!-- 網頁標頭區塊，包含元資料、標題與樣式設定 -->
+  <meta charset="UTF-8"> <!-- 設定網頁字元編碼為 UTF-8 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!-- 設定響應式視埠（Viewport），禁止使用者手動縮放 -->
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0"> <!-- 設定 HTTP 快取控制，禁止瀏覽器與伺服器快取本頁 -->
+  <meta http-equiv="Pragma" content="no-cache"> <!-- 向舊版 HTTP/1.0 瀏覽器發送禁止快取指令 -->
+  <meta http-equiv="Expires" content="0"> <!-- 設定頁面快取過期時間為 0（立即過期） -->
+  <title>呈奏呈報表</title> <!-- 設定瀏覽器分頁標題為「呈奏呈報表」 -->
+  <style> /* 開始 CSS 樣式定義區塊 */
+    :root{ /* 定義全域根節點 CSS 變數 */
+      --gold:#f2cf08; /* 全域金黃色調變數 */
+      --red:#c90000; /* 全域主紅色調變數 */
+      --deep-red:#a80000; /* 全域深紅色調變數 */
+      --blue:#063dff; /* 全域藍色重點調變數 */
+      --ink:#111; /* 全域墨黑內文色變數 */
+      --stage-w:1600px; /* 定義舞台畫布目標寬度 1600px */
+      --stage-h:900px; /* 定義舞台畫布目標高度 900px */
+    } /* 結束根節點 CSS 變數定義 */
+
+    *{box-sizing:border-box} /* 針對所有元素設置 border-box 模型，使 padding 與 border 計入總寬高 */
+
+    html,body{ /* 針對 html 與 body 元素套用基礎樣式 */
+      margin:0; /* 清除瀏覽器預設外距 */
+      width:100%; /* 設定寬度為 100% 滿版 */
+      height:100%; /* 設定高度為 100% 滿版 */
+      overflow:hidden; /* 隱藏溢出視窗的捲軸 */
+      background:var(--gold); /* 頁面背景色套用金色變數 */
+      color:var(--ink); /* 文字預設顏色套用墨黑色變數 */
+      font-family:"DFKai-SB","BiauKai","KaiTi","標楷體",serif; /* 設定字體優先順序為標楷體系與襯線體 */
+    } /* 結束 html,body 樣式區塊 */
+
+    body{ /* 針對 body 元素設定彈性盒子居中佈局 */
+      display:flex; /* 使用 Flexbox 彈性佈局 */
+      align-items:center; /* 置中對齊次軸（垂直置中） */
+      justify-content:center; /* 置中對齊主軸（水平置中） */
+    } /* 結束 body 樣式區塊 */
+
+    #stage{ /* 設定 ID 為 stage 的主要畫布容器樣式 */
+      width:var(--stage-w); /* 設定畫布寬度為變數 1600px */
+      height:var(--stage-h); /* 設定畫布高度為變數 900px */
+      padding:28px 42px 20px; /* 設定畫布內距：上 28px、左右 42px、下 20px */
+      position:relative; /* 設定定位方式為相對定位，供子元素絕對定位使用 */
+      transform-origin:center center; /* 設定 CSS Transform 縮放變形中心點為正中央 */
+      overflow:hidden; /* 隱藏超出畫布範圍的內容 */
+      background:var(--gold); /* 畫布背景色套用金色變數 */
+    } /* 結束 #stage 樣式區塊 */
+
+    .red{color:var(--red);font-weight:700} /* .red 類別：文字設為紅色且粗體 */
+    .blue{color:var(--blue);font-weight:700} /* .blue 類別：文字設為藍色且粗體 */
+
+    .hero{ /* .hero 頁首橫幅區塊樣式 */
+      height:176px; /* 設定區塊高度為 176px */
+      text-align:center; /* 區塊內文字設定為置中對齊 */
+    } /* 結束 .hero 樣式區塊 */
+
+    .title{ /* .title 大標題樣式 */
+      margin:0; /* 清除標題預設外距 */
+      color:var(--red); /* 標題文字顏色套用紅色變數 */
+      font-size:58px; /* 設定標題字體大小為 58px */
+      line-height:1; /* 設定行高為 1 倍 */
+      letter-spacing:.88em; /* 設定字距為 0.88em 展現大氣排版 */
+      padding-left:.88em; /* 左側推開 0.88em 內距以修正字距所造成的偏移 */
+      font-weight:700; /* 設定字體為粗體 */
+    } /* 結束 .title 樣式區塊 */
+
+    .deity{ /* .deity 仙佛聖號區塊樣式 */
+      margin-top:13px; /* 設定上方外距 13px */
+      font-size:27px; /* 設定字體大小為 27px */
+      line-height:1.1; /* 設定行高為 1.1 倍 */
+    } /* 結束 .deity 樣式區塊 */
+
+    .date-row{ /* .date-row 日期資訊行樣式 */
+      margin-top:14px; /* 設定上方外距 14px */
+      font-size:26px; /* 設定字體大小為 26px */
+      line-height:1.2; /* 設定行高為 1.2 倍 */
+      white-space:nowrap; /* 設定文字不換行 */
+      text-align:center; /* 設定文字置中對齊 */
+    } /* 結束 .date-row 樣式區塊 */
+
+    .major-rule{ /* .major-rule 分隔紅線樣式 */
+      position:relative; /* 定位方式設為相對定位 */
+      height:16px; /* 設定高度 16px */
+      border-top:3px solid var(--red); /* 設定上邊框為 3px 實線紅色 */
+      margin-top:10px; /* 設定上方外距 10px */
+    } /* 結束 .major-rule 樣式區塊 */
+
+    .top-grid{ /* .top-grid 上方雙欄網格容器樣式 */
+      display:grid; /* 使用 CSS Grid 網格佈局 */
+      grid-template-columns:1.08fr .92fr; /* 定義兩欄比例為 1.08 : 0.92 */
+      gap:38px; /* 設定網格間距為 38px */
+      height:326px; /* 設定容器高度為 326px */
+    } /* 結束 .top-grid 樣式區塊 */
+
+    .section{ /* .section 通用章節樣式 */
+      min-width:0; /* 允許網格項目縮小至最小內容以下，防止溢出 */
+    } /* 結束 .section 樣式區塊 */
+
+    .section-head{ /* .section-head 章節標頭列樣式 */
+      display:flex; /* 使用 Flexbox 彈性佈局 */
+      align-items:center; /* 垂直置中對齊項目 */
+      gap:10px; /* 設定元素間距為 10px */
+      height:42px; /* 設定標頭列高度為 42px */
+      margin-bottom:7px; /* 設定下方外距 7px */
+    } /* 結束 .section-head 樣式區塊 */
+
+    .section-badge{ /* .section-badge 章節標籤徽章樣式 */
+      flex:0 0 auto; /* 保持原大小，不放大也不縮小 */
+      min-width:174px; /* 設定最小寬度 174px */
+      padding:5px 18px 6px; /* 設定內距：上5px 左右18px 下6px */
+      border-radius:15px; /* 設定圓角半徑為 15px */
+      background:var(--deep-red); /* 背景色套用深紅色變數 */
+      border:2px solid var(--red); /* 邊框設為 2px 實線紅色 */
+      box-shadow:inset 0 0 0 2px #ffd962; /* 內陰影模擬雙層金色細框線效果 */
+      color:#fff6b6; /* 徽章文字顏色設為淺金黃色 */
+      font-size:24px; /* 設定字體大小 24px */
+      line-height:1.05; /* 設定行高 1.05 */
+      text-align:center; /* 文字置中對齊 */
+      font-weight:700; /* 設定粗體 */
+      letter-spacing:.06em; /* 設定字距 0.06em */
+    } /* 結束 .section-badge 樣式區塊 */
+
+    .section-head::after{ /* 章節標頭尾端延伸紅線虛擬元素 */
+      content:""; /* 虛擬元素內容設為空 */
+      height:2px; /* 設定橫線高度 2px */
+      background:var(--red); /* 背景色套用紅色變數 */
+      flex:1; /* 彈性拉伸填滿剩餘寬度 */
+    } /* 結束 .section-head::after 樣式區塊 */
+
+    .class-info{ /* .class-info 班務資訊區塊樣式 */
+      padding-right:10px; /* 設定右側內距 10px */
+    } /* 結束 .class-info 樣式區塊 */
+
+    .class-table, /* 班務資訊表格 */
+    .stats-table{ /* 人數統計表格 */
+      width:100%; /* 表格寬度 100% */
+      border-collapse:collapse; /* 邊框合併為單一邊框 */
+      table-layout:fixed; /* 使用固定表格佈局，加速渲染與控制欄寬 */
+    } /* 結束表格基礎樣式 */
+
+    .class-table{ /* 班務表格專屬字體設定 */
+      font-size:23px; /* 字體大小 23px */
+      line-height:1.30; /* 行高 1.30 */
+    } /* 結束 .class-table 樣式區塊 */
+
+    .class-table td{ /* 班務表格儲存格樣式 */
+      padding:4px 0; /* 上下內距 4px，左右 0 */
+      vertical-align:top; /* 內容頂端對齊 */
+    } /* 結束 .class-table td 樣式區塊 */
+
+    .class-label{ /* 班務表格項目名稱標籤欄樣式 */
+      width:150px; /* 欄寬固定 150px */
+      white-space:nowrap; /* 文字不換行 */
+      color:var(--ink); /* 文字顏色套用墨黑色 */
+    } /* 結束 .class-label 樣式區塊 */
+
+    .class-value{ /* 班務表格項目數值內容欄樣式 */
+      color:var(--blue); /* 數值文字顏色套用藍色變數 */
+      font-weight:700; /* 設為粗體 */
+      word-break:keep-all; /* CJK 中日韓文字避免隨意斷字 */
+      overflow-wrap:anywhere; /* 長單字或符號允許在任意處斷行 */
+    } /* 結束 .class-value 樣式區塊 */
+
+    .stats{ /* .stats 人數統計區塊樣式 */
+      padding-left:28px; /* 設定左側內距 28px */
+      border-left:2px solid var(--red); /* 設定左側紅框線 2px */
+      position:relative; /* 設定相對定位 */
+    } /* 結束 .stats 樣式區塊 */
+
+    .stats-table{ /* 人數統計表格專屬設定 */
+      font-size:24px; /* 字體大小 24px */
+      line-height:1.25; /* 行高 1.25 */
+    } /* 結束 .stats-table 樣式區塊 */
+
+    .stats-table td{ /* 人數統計表格儲存格樣式 */
+      height:40px; /* 儲存格高度固定 40px */
+      padding:4px 3px; /* 內距：上下 4px、左右 3px */
+      vertical-align:middle; /* 內容垂直居中對齊 */
+      white-space:nowrap; /* 文字不換行 */
+    } /* 結束 .stats-table td 樣式區塊 */
+
+    .stats-label{width:150px} /* 人數統計項目名稱標籤欄寬 150px */
+
+    .num{ /* 數字顯示樣式 */
+      color:var(--blue); /* 文字顏色套用藍色變數 */
+      font-weight:700; /* 設為粗體 */
+      font-size:31px; /* 字體大小 31px */
+      display:inline-block; /* 轉為行內塊級元素以套用寬度 */
+      min-width:38px; /* 設定最小寬度 38px 對齊數字 */
+      text-align:center; /* 數字置中對齊 */
+    } /* 結束 .num 樣式區塊 */
+
+    .courses{ /* .courses 課程區塊樣式 */
+      height:112px; /* 高度固定 112px */
+      margin-top:2px; /* 上方外距 2px */
+      overflow:hidden; /* 溢出內容隱藏 */
+    } /* 結束 .courses 樣式區塊 */
+
+    .courses .section-head{ /* 課程區塊專屬標頭調整 */
+      margin-bottom:1px; /* 下方外距縮減至 1px */
+    } /* 結束 .courses .section-head 樣式區塊 */
+
+    .course-list{ /* 課程列表容器樣式 */
+      margin-left:205px; /* 左側推開 205px 對齊標籤 */
+      margin-top:-3px; /* 上方外距向上微調 -3px */
+      display:grid; /* 使用 CSS Grid 網格佈局 */
+      row-gap:1px; /* 列間距 1px */
+    } /* 結束 .course-list 樣式區塊 */
+
+    .course-row{ /* 單條課程項目網格樣式 */
+      display:grid; /* 使用 CSS Grid 網格佈局 */
+      grid-template-columns:minmax(0,1fr) 170px; /* 課名彈性佔滿，主講者固定 170px */
+      gap:18px; /* 課名與主講者之間間距 18px */
+      align-items:baseline; /* 文字基準線對齊 */
+      font-size:23px; /* 字體大小 23px */
+      line-height:1.28; /* 行高 1.28 */
+      color:var(--blue); /* 文字顏色套用藍色變數 */
+      font-weight:700; /* 設為粗體 */
+      max-width:930px; /* 設定最大寬度 930px */
+    } /* 結束 .course-row 樣式區塊 */
+
+    .course-speaker{ /* 課程主講者樣式 */
+      white-space:nowrap; /* 主講者姓名不換行 */
+    } /* 結束 .course-speaker 樣式區塊 */
+
+    .notes{ /* .notes 備註（請假名單）區塊樣式 */
+      height:224px; /* 區塊高度固定 224px */
+      overflow:hidden; /* 溢出內容隱藏 */
+      position:relative; /* 相對定位，供落款叩呈絕對定位 */
+      padding-bottom:42px; /* 底部留白 42px 預留落款空間 */
+    } /* 結束 .notes 樣式區塊 */
+
+    .notes .section-head{ /* 備註區塊專屬標頭調整 */
+      margin-bottom:5px; /* 下方外距 5px */
+    } /* 結束 .notes .section-head 樣式區塊 */
+
+    .leave-row{ /* 請假名單單行容器樣式 */
+      display:grid; /* 使用 CSS Grid 網格佈局 */
+      grid-template-columns:92px 1fr; /* 左邊類別標籤 92px，右邊名單佔滿 */
+      align-items:start; /* 頂端對齊 */
+      column-gap:8px; /* 欄間距 8px */
+      margin-bottom:4px; /* 下方外距 4px */
+    } /* 結束 .leave-row 樣式區塊 */
+
+    .leave-label{ /* 請假類別標籤樣式 (如：病假、事假) */
+      font-size:21px; /* 字體大小 21px */
+      line-height:1.3; /* 行高 1.3 */
+      font-weight:700; /* 設為粗體 */
+      white-space:nowrap; /* 文字不換行 */
+    } /* 結束 .leave-label 樣式區塊 */
+
+    .leave-grid{ /* 請假人員名單多欄網格容器樣式 */
+      display:grid; /* 使用 CSS Grid 網格佈局 */
+      grid-template-columns:repeat(10,minmax(0,1fr)); /* 預設分為 10 欄均分寬度 */
+      gap:2px 9px; /* 網格間距：上下 2px、左右 9px */
+      color:var(--blue); /* 文字顏色套用藍色變數 */
+      font-weight:700; /* 設為粗體 */
+      font-size:17px; /* 字體大小 17px */
+      line-height:1.25; /* 行高 1.25 */
+      min-width:0; /* 防止子元素溢出 */
+    } /* 結束 .leave-grid 樣式區塊 */
+
+    .leave-item{ /* 單個請假人員名字項目樣式 */
+      white-space:nowrap; /* 人名不換行 */
+      overflow:hidden; /* 溢出字串隱藏 */
+      text-overflow:clip; /* 溢出時裁切 */
+    } /* 結束 .leave-item 樣式區塊 */
+
+    .leave-empty{ /* 無人請假時的無資料顯示樣式 */
+      color:var(--ink); /* 文字顏色套用墨黑色 */
+      font-weight:400; /* 設為一般字體粗細 */
+      font-size:19px; /* 字體大小 19px */
+    } /* 結束 .leave-empty 樣式區塊 */
+
+    .signature{ /* 弟子叩呈落款樣式 */
+      position:absolute; /* 絕對定位於區塊右下角 */
+      right:6px; /* 靠右 6px */
+      bottom:4px; /* 靠下 4px */
+      font-size:24px; /* 字體大小 24px */
+      line-height:1; /* 行高 1 */
+      white-space:nowrap; /* 文字不換行 */
+      text-align:right; /* 右對齊 */
+    } /* 結束 .signature 樣式區塊 */
+
+    #source-status{ /* Google Sheet 同步狀態提示膠囊樣式 */
+      position:absolute; /* 絕對定位於舞台畫布左下角 */
+      left:12px; /* 靠左 12px */
+      bottom:8px; /* 靠下 8px */
+      font-family:Arial,"Noto Sans TC",sans-serif; /* 設定狀態文字為無襯線字體 */
+      font-size:13px; /* 字體大小 13px */
+      color:#333; /* 文字顏色深灰 */
+      background:rgba(255,255,255,.58); /* 半透明白色背景 */
+      border:1px solid rgba(0,0,0,.16); /* 淺灰色邊框 */
+      border-radius:10px; /* 圓角膠囊形狀 10px */
+      padding:4px 9px; /* 內距：上下 4px、左右 9px */
+      user-select:none; /* 禁止使用者選取狀態文字 */
+      z-index:20; /* 層級 20 確保位於最上層 */
+    } /* 結束 #source-status 樣式區塊 */
+
+    #source-status.ok{ color:#075f1d; } /* 狀態為 ok 時文字顯示深綠色 */
+    #source-status.err{ color:#9a1111; } /* 狀態為 err 時文字顯示深紅色 */
+
+    @media(max-aspect-ratio:16/9){ /* 當螢幕寬高比小於 16:9 時的媒體查詢 */
+      /* scaling handled by JS */ /* 畫布縮放拉伸改由 JavaScript (fitStage) 動態計算處理 */
+    } /* 結束媒體查詢 */
+  </style> <!-- 結束 CSS 樣式定義區塊 -->
+</head> <!-- 結束標頭區塊 -->
+<body> <!-- 開始網頁主體內容區塊 -->
+  <main id="stage"> <!-- 主要內容畫布容器，設定 ID 為 stage 供 JS 控制縮放 -->
+    <header class="hero"> <!-- 頁面頂部橫幅區塊 -->
+      <h1 class="title">呈　奏</h1> <!-- 主要大標題「呈奏」 -->
+      <div class="deity"> <!-- 仙佛聖號與讚頌詞容器 -->
+        <span id="deity" class="red"></span>　<span>大慈大悲</span> <!-- 仙佛名稱(動態填入)與「大慈大悲」文字 -->
+      </div> <!-- 結束仙佛聖號容器 -->
+      <div class="date-row"> <!-- 歲次農曆與西元日期排版容器 -->
+        天運歲次 <span id="ganzhi" class="red"></span> 年　 <!-- 農曆干支年份 (動態填入) -->
+        西元 <span id="year" class="red"></span> 年　 <!-- 西元年分 (動態填入) -->
+        <span id="month" class="red"></span> 月　 <!-- 月份 (動態填入) -->
+        <span id="day" class="red"></span> 日　 <!-- 日期 (動態填入) -->
+        為期 <span id="days" class="red"></span> 天 <!-- 班期天數 (動態填入) -->
+      </div> <!-- 結束日期列容器 -->
+      <div class="major-rule"></div> <!-- 頂部紅橫分隔線 -->
+    </header> <!-- 結束頂部橫幅區塊 -->
+
+    <section class="top-grid"> <!-- 上半部雙欄網格區塊 (班務資訊與人數統計) -->
+      <div class="section class-info"> <!-- 左側班務資訊容器 -->
+        <div class="section-head"><div class="section-badge">班務資訊</div></div> <!-- 章節標題徽章：「班務資訊」 -->
+        <table class="class-table"> <!-- 班務詳細資料表格 -->
+          <tr><td class="class-label">班　　名：</td><td id="className" class="class-value"></td></tr> <!-- 班級名稱 (動態填入) -->
+          <tr><td class="class-label">主辦單位：</td><td id="organizer" class="class-value"></td></tr> <!-- 主辦單位 (動態填入) -->
+          <tr><td class="class-label">監　　班：</td><td id="supervisor" class="class-value"></td></tr> <!-- 監班人員 (動態填入) -->
+          <tr><td class="class-label">主　　班：</td><td id="mainLeader" class="class-value"></td></tr> <!-- 主班人員 (動態填入) -->
+          <tr><td class="class-label">領　　班：</td><td id="leaders" class="class-value"></td></tr> <!-- 領班人員列表 (動態填入) -->
+        </table> <!-- 結束班務資料表格 -->
+      </div> <!-- 結束左側班務資訊容器 -->
+
+      <div class="section stats"> <!-- 右側人數統計容器 -->
+        <div class="section-head"><div class="section-badge">人數統計</div></div> <!-- 章節標題徽章：「人數統計」 -->
+        <table class="stats-table"> <!-- 人數統計數據表格 -->
+          <tr> <!-- 第一行：班員人數統計 -->
+            <td class="stats-label">班　　員：</td> <!-- 項目名稱：班員 -->
+            <td>乾 <span id="studentM" class="num"></span> 名</td> <!-- 乾道班員人數 (動態填入) -->
+            <td>坤 <span id="studentF" class="num"></span> 名</td> <!-- 坤道班員人數 (動態填入) -->
+            <td>計 <span id="studentT" class="num"></span> 名</td> <!-- 班員小計人數 (動態填入) -->
+          </tr> <!-- 結束班員人數統計行 -->
+          <tr> <!-- 第二行：班內服務人數統計 -->
+            <td class="stats-label">班內服務：</td> <!-- 項目名稱：班內服務 -->
+            <td>乾 <span id="insideM" class="num"></span> 名</td> <!-- 乾道班內服務人數 (動態填入) -->
+            <td>坤 <span id="insideF" class="num"></span> 名</td> <!-- 坤道班內服務人數 (動態填入) -->
+            <td></td> <!-- 空白預留格 -->
+          </tr> <!-- 結束班內服務人數統計行 -->
+          <tr> <!-- 第三行：班外服務人數統計 -->
+            <td class="stats-label">班外服務：</td> <!-- 項目名稱：班外服務 -->
+            <td>乾 <span id="outsideM" class="num"></span> 名</td> <!-- 乾道班外服務人數 (動態填入) -->
+            <td>坤 <span id="outsideF" class="num"></span> 名</td> <!-- 坤道班外服務人數 (動態填入) -->
+            <td></td> <!-- 空白預留格 -->
+          </tr> <!-- 結束班外服務人數統計行 -->
+          <tr> <!-- 第四行：合計（乾/坤分類合計） -->
+            <td class="stats-label">合　　計：</td> <!-- 項目名稱：合計 -->
+            <td>乾 <span id="totalM" class="num"></span> 名</td> <!-- 乾道總合計人數 (動態填入) -->
+            <td>坤 <span id="totalF" class="num"></span> 名</td> <!-- 坤道總合計人數 (動態填入) -->
+            <td></td> <!-- 空白預留格 -->
+          </tr> <!-- 結束合計行 -->
+          <tr> <!-- 第五行：共計（總人數） -->
+            <td class="stats-label">共　　計：</td> <!-- 項目名稱：共計 -->
+            <td colspan="3">乾坤 <span id="grandTotal" class="num"></span> 名</td> <!-- 跨三欄顯示總計總人數 (動態填入) -->
+          </tr> <!-- 結束共計行 -->
+        </table> <!-- 結束人數統計表格 -->
+      </div> <!-- 結束右側人數統計容器 -->
+    </section> <!-- 結束上半部網格區塊 -->
+
+    <section class="section courses"> <!-- 中間今日人事課程區塊 -->
+      <div class="section-head"><div class="section-badge">今日人事課程</div></div> <!-- 章節標題徽章：「今日人事課程」 -->
+      <div id="courseList" class="course-list"></div> <!-- 課程列表動態渲染容器 -->
+    </section> <!-- 結束今日人事課程區塊 -->
+
+    <section class="section notes"> <!-- 下半部備註（請假名單與落款）區塊 -->
+      <div class="section-head"><div class="section-badge">備註（請假名單）</div></div> <!-- 章節標題徽章：「備註（請假名單）」 -->
+
+      <div class="leave-row"> <!-- 病假名單行 -->
+        <div class="leave-label">病　假：</div> <!-- 病假標籤 -->
+        <div id="sickList" class="leave-grid"></div> <!-- 病假人員動態網格容器 -->
+      </div> <!-- 結束病假名單行 -->
+
+      <div class="leave-row"> <!-- 事假名單行 -->
+        <div class="leave-label">事　假：</div> <!-- 事假標籤 -->
+        <div id="personalList" class="leave-grid"></div> <!-- 事假人員動態網格容器 -->
+      </div> <!-- 結束事假名單行 -->
+
+      <div class="signature"> <!-- 右下角弟子叩呈落款容器 -->
+        弟子　<span id="signer" class="blue"></span>　叩呈 <!-- 呈報弟子姓名 (動態填入) 與叩呈字樣 -->
+      </div> <!-- 結束落款容器 -->
+    </section> <!-- 結束備註區塊 -->
+
+    <div id="source-status"></div> <!-- 浮動狀態提示膠囊，顯示 Google Sheet 同步狀態 -->
+  </main> <!-- 結束舞台容器 -->
+
+  <script> // 開始 JavaScript 腳本程式碼區塊
+    const SHEET_ID = "1Yd08hsd9fqtnf5UkuRi9vJAGAb6YF-L15Z6faSy5FMc"; // 定義 Google Sheet 的文件唯一 ID 密鑰
+    const SHEET_GID = "1392157113"; // 定義目標工作表 (Tab) 的子 ID (GID)
+
+    function txt(v){ // 輔助函式：文字清理與安全防護
+      return v == null ? "" : String(v).trim(); // 若輸入為空或 undefined 則回傳空字串，否則轉為字串並去除前後空格
+    } // 結束 txt 函式
+
+    const CELL_MAP = { // 定義 Google Sheet 儲存格座標與資料 Key 的對應字典
+      deity: "A3", // 仙佛聖號對應儲存格 A3
+      ganzhi: "B4", // 天運歲次干支對應儲存格 B4
+      year: "D4", // 西元年對應儲存格 D4
+      month: "D5", // 月份對應儲存格 D5
+      day: "D6", // 日期對應儲存格 D6
+      days: "D7", // 天數對應儲存格 D7
+      className: "C8", // 班名對應儲存格 C8
+      organizerRaw: "C9", // 主辦單位原始文字對應儲存格 C9
+      supervisor: "C10", // 監班對應儲存格 C10
+      mainLeader: "C11", // 主班對應儲存格 C11
+      leaders1: "C12", // 領班 1 對應儲存格 C12
+      leaders2: "C13", // 領班 2 對應儲存格 C13
+      leaders3: "D13", // 領班 3 對應儲存格 D13
+      leaders4: "E13", // 領班 4 對應儲存格 E13
+      studentM: "C14", // 乾道班員數對應儲存格 C14
+      studentF: "C15", // 坤道班員數對應儲存格 C15
+      studentT: "C16", // 班員總數對應儲存格 C16
+      leaderM: "C18", // 乾道幹部數對應儲存格 C18
+      leaderF: "C19", // 坤道幹部數對應儲存格 C19
+      leaderT: "C20", // 幹部總數對應儲存格 C20
+      insideM: "C22", // 乾道班內服務數對應儲存格 C22
+      insideF: "C23", // 坤道班內服務數對應儲存格 C23
+      outsideM: "C25", // 乾道班外服務數對應儲存格 C25
+      outsideF: "C26", // 坤道班外服務數對應儲存格 C26
+      totalM: "C28", // 乾道合計人數對應儲存格 C28
+      totalF: "C29", // 坤道合計人數對應儲存格 C29
+      grandTotal: "C31", // 總共計人數對應儲存格 C31
+      signer: "C33", // 叩呈弟子姓名對應儲存格 C33
+      sick: "C36", // 病假人員清單對應儲存格 C36
+      personal: "C37", // 事假人員清單對應儲存格 C37
+      courses: "C39" // 課程與主講者清單對應儲存格 C39
+    }; // 結束 CELL_MAP 物件定義
+
+    function getSingleCellJsonp(a1){ // 透過 JSONP 異步讀取 Google Sheet 單一儲存格內容
+      return new Promise((resolve,reject)=>{ // 回傳 Promise 以支援 async/await 寫法
+        const callbackName = "__sheetCell_" + a1.replace(/[^A-Z0-9]/gi,"_") + "_" + Date.now() + "_" + Math.floor(Math.random()*100000); // 動態生成獨一無二的全域 JSONP 回調函式名稱
+        const script = document.createElement("script"); // 動態建立 <script> 標籤
+
+        const timeout = setTimeout(()=>{ // 設定 10 秒超時定時器
+          cleanup(); // 超時時執行資源清理
+          reject(new Error("讀取 " + a1 + " 逾時")); // 觸發 Promise reject 並帶入超時錯誤訊息
+        },10000); // 10000 毫秒 (10 秒)
+
+        function cleanup(){ // 內部清理函式：移除腳本與回調
+          clearTimeout(timeout); // 清除超時定時器
+          try{ delete window[callbackName]; }catch(e){ window[callbackName] = undefined; } // 刪除全域 window 上的 callback 回調函式
+          if(script.parentNode) script.parentNode.removeChild(script); // 從 DOM Tree 中移除已載入的 script 標籤
+        } // 結束 cleanup 函式
+
+        window[callbackName] = function(json){ // 掛載全域回調函式接收 Google Visualization 傳回的 JSON 資料
+          cleanup(); // 收到回應後立即清理資源
+          try{ // 嘗試解析 JSON 資料結構
+            const rows = json && json.table && json.table.rows ? json.table.rows : []; // 安全取得表格資料行陣列
+            const cell = rows[0] && rows[0].c ? rows[0].c[0] : null; // 取得第一行第一列的儲存格物件
+            if(!cell){ // 若無儲存格資料
+              resolve(""); // 解析為空字串
+              return; // 結束執行
+            } // 結束無資料判斷
+            const value = cell.f != null ? cell.f : cell.v; // 優先使用格式化後的文字 (f)，次之使用原始值 (v)
+            resolve(value == null ? "" : String(value).trim()); // 解析 Promise 並輸出去除空白後的字串內容
+          }catch(err){ // 若解析過程發生錯誤
+            reject(err); // 觸發 Promise reject 傳出例外
+          } // 結束 try-catch
+        }; // 結束 callback 回調定義
+
+        script.onerror = function(){ // 監聽 script 載入失敗事件（如網路中斷或 404）
+          cleanup(); // 失敗時執行資源清理
+          reject(new Error("讀取 " + a1 + " 失敗")); // 觸發 Promise reject 並帶回失敗錯誤訊息
+        }; // 結束 script.onerror 定義
+
+        script.src = // 設定 script 的 HTTP 請求 URL 來源
+          "https://docs.google.com/spreadsheets/d/" + SHEET_ID + // Google Sheet 文件基底網址
+          "/gviz/tq?tqx=out:json;responseHandler:" + callbackName + // 呼叫 gviz/tq API，指定輸出 json 並設定 callback 名稱
+          "&gid=" + SHEET_GID + // 指定工作表 GID
+          "&range=" + encodeURIComponent(a1) + // 指定要查詢的儲存格範圍 (A1 notation)
+          "&headers=0&_=" + Date.now(); // 停用表頭，並附加時間戳記參數避免瀏覽器 HTTP 快取
+
+        document.head.appendChild(script); // 將 script 標籤插入至 <head> 觸發跨網域 JSONP 請求
+      }); // 結束 Promise 構建
+    } // 結束 getSingleCellJsonp 函式
+
+    async function readLiveSheetData(){ // 異步讀取所有 CELL_MAP 中定義的儲存格即時資料
+      const entries = Object.entries(CELL_MAP); // 將 CELL_MAP 物件轉為 [key, a1_address] 陣列對
+      const values = await Promise.all( // 使用 Promise.all 並行並列發起所有儲存格的 JSONP 請求
+        entries.map(async ([key,a1]) => [key, await getSingleCellJsonp(a1)]) // 對每個 key 異步抓取儲存格數值，回傳 [key, value]
+      ); // 等待所有儲存格抓取完成
+
+      const raw = Object.fromEntries(values); // 將 [key, value] 陣列組裝回物件字典
+
+      return { // 組裝並整理清洗最終的資料物件結構
+        deity: raw.deity, // 仙佛聖號
+        ganzhi: raw.ganzhi, // 干支歲次
+        year: raw.year, // 西元年
+        month: raw.month, // 月份
+        day: raw.day, // 日期
+        days: raw.days, // 班期天數
+        className: raw.className, // 班級名稱
+        organizer: raw.organizerRaw ? ("寶光崇正 " + raw.organizerRaw).trim() : "", // 自動於主辦單位前方補上「寶光崇正」前綴字樣
+        supervisor: raw.supervisor, // 監班
+        mainLeader: raw.mainLeader, // 主班
+        leaders: [raw.leaders1,raw.leaders2,raw.leaders3,raw.leaders4].filter(Boolean).join("\n"), // 組合並以換行符號連接四個領班欄位
+        studentM: raw.studentM, // 乾道班員數
+        studentF: raw.studentF, // 坤道班員數
+        studentT: raw.studentT, // 班員小計數
+        leaderM: raw.leaderM, // 乾道幹部數
+        leaderF: raw.leaderF, // 坤道幹部數
+        leaderT: raw.leaderT, // 幹部小計數
+        insideM: raw.insideM, // 乾道班內服務數
+        insideF: raw.insideF, // 坤道班內服務數
+        outsideM: raw.outsideM, // 乾道班外服務數
+        outsideF: raw.outsideF, // 坤道班外服務數
+        totalM: raw.totalM, // 乾道合計人數
+        totalF: raw.totalF, // 坤道合計人數
+        grandTotal: raw.grandTotal, // 乾坤總共計人數
+        signer: raw.signer, // 叩呈弟子姓名
+        sick: raw.sick, // 病假原始字串
+        personal: raw.personal, // 事假原始字串
+        courses: raw.courses // 課程原始字串
+      }; // 結束回傳物件
+    } // 結束 readLiveSheetData 函式
+
+    function setText(id,value){ // 輔助函式：安全設定指定元素 ID 的文字內容
+      const el = document.getElementById(id); // 透過 ID 取得 DOM 元素
+      if(el) el.textContent = value || ""; // 若元素存在，設定其 textContent 文字（空值時給予空字串）
+    } // 結束 setText 函式
+
+    function parseLeave(raw){ // 解析請假名單原始字串為名字陣列
+      if(!raw || !raw.trim()) return []; // 若原始資料為空則回傳空陣列
+      return raw // 開始處理字串
+        .replace(/\r/g,"") // 去除 Windows 風格的斷行換行符號 \r
+        .split(/\n+/) // 以一或多個換行符號進行切割為多行
+        .map(line => line.trim()) // 清理每一行的前後空白字元
+        .filter(Boolean) // 過濾掉空白行
+        .map(line => { // 處理每一行人員格式
+          const parts = line.split(/\t+/).map(s=>s.trim()).filter(Boolean); // 嘗試以 Tab 鍵分割欄位 (例如：單位 姓名 備註)
+          if(parts.length >= 3) return parts[0] + " " + parts[1] + " " + parts.slice(2).join(" "); // 若有三欄以上，以空格重新組合
+          return line.replace(/\s{2,}/g," "); // 否則將連續兩個以上的空白收攏為單一空格
+        }); // 結束地圖轉換
+    } // 結束 parseLeave 函式
+
+    function renderLeave(id,raw){ // 渲染請假名單至指定網格容器
+      const el = document.getElementById(id); // 取得請假名單容器 DOM
+      el.innerHTML = ""; // 清空容器舊內容
+      const items = parseLeave(raw); // 解析 raw 字串取得請假人名陣列
+
+      if(!items.length){ // 若無任何請假人員
+        const empty = document.createElement("div"); // 建立 div 元素顯示無資料符號
+        empty.className = "leave-empty"; // 指定無資料元素類別
+        empty.textContent = "—"; // 顯示破折號「—」代表無人請假
+        el.appendChild(empty); // 插入容器中
+        return; // 結束函式執行
+      } // 結束無資料判斷
+
+      const count = items.length; // 取得請假總人數
+      const cols = count > 70 ? 11 : count > 55 ? 10 : count > 40 ? 9 : count > 24 ? 8 : 6; // 根據人數動態計算網格欄數 (6~11欄)
+      const size = count > 70 ? 15.5 : count > 55 ? 16.5 : count > 40 ? 17 : 18; // 根據人數動態微調字型大小 (15.5px~18px)
+      el.style.gridTemplateColumns = "repeat(" + cols + ", minmax(0,1fr))"; // 設定 CSS Grid 的列欄位數與寬度分配
+      el.style.fontSize = size + "px"; // 動態套用計算後的字型大小
+
+      items.forEach(item=>{ // 遍歷請假人員姓名陣列
+        const div = document.createElement("div"); // 建立獨立的人名 div 區塊
+        div.className = "leave-item"; // 設定人名區塊類別
+        div.textContent = item; // 寫入人名文字內容
+        el.appendChild(div); // 插入名單網格容器中
+      }); // 結束遍歷
+    } // 結束 renderLeave 函式
+
+    function splitTitleSpeaker(line){ // 解析單行課程字串，拆解為課名與主講者
+      line = line.trim(); // 清理兩端空白
+      if(!line) return null; // 若為空行則回傳 null
+      const parts = line.split(/\s{2,}/).map(s=>s.trim()).filter(Boolean); // 嘗試以兩個以上的連續空格拆分課名與講師
+      if(parts.length >= 2){ // 若能拆分為兩部份以上
+        return {title:parts[0], speaker:parts.slice(1).join(" ")}; // 第一部分為課名，剩餘為講師姓名
+      } // 結束拆分判斷
+      return {title:line,speaker:""}; // 若無法拆分，整行作為課名，講師傳回空字串
+    } // 結束 splitTitleSpeaker 函式
+
+    function parseCourses(raw){ // 解析整段課程原始字串為課程結構陣列
+      if(!raw || !raw.trim()) return []; // 若原始資料為空則回傳空陣列
+      const base = raw.replace(/\r/g,"").split(/\n+/).map(s=>s.trim()).filter(Boolean); // 清理 \r 並按換行切分成行陣列
+      const out = []; // 準備儲存解析結果的陣列
+
+      base.forEach(line=>{ // 遍歷每一行課程文字
+        const q = line.indexOf("？"); // 檢查行內是否包含中文全形問號「？」 (用以識別雙課合一行)
+        if(q >= 0 && q < line.length-1){ // 若存在問號且非位於末端
+          const first = line.slice(0,q+1).trim(); // 前半段作為第一堂課
+          const rest = line.slice(q+1).trim(); // 後半段作為第二堂課
+          const a = splitTitleSpeaker(first); // 解析前半段課名與講師
+          const b = splitTitleSpeaker(rest); // 解析後半段課名與講師
+          if(a) out.push(a); // 若有內容則推入結果
+          if(b) out.push(b); // 若有內容則推入結果
+        }else{ // 正常單堂課情況
+          const item = splitTitleSpeaker(line); // 直接解析課名與講師
+          if(item) out.push(item); // 推入結果陣列
+        } // 結束問號條件判斷
+      }); // 結束遍歷
+
+      for(let i=0;i<out.length;i++){ // 檢查並補全缺漏主講者的課程
+        if(!out[i].speaker){ // 若該堂課缺少主講者
+          const next = out.slice(i+1).find(x=>x.speaker); // 往後尋找有指定主講者的項目
+          if(next && next.speaker === "各地幹部") out[i].speaker = next.speaker; // 若後續項目主講者為「各地幹部」，則往前補全
+        } // 結束補全判斷
+      } // 結束補全迴圈
+      return out; // 回傳完整解析後的課程物件陣列
+    } // 結束 parseCourses 函式
+
+    function renderCourses(raw){ // 渲染課程列表至 HTML 畫面
+      const el = document.getElementById("courseList"); // 取得課程容器 DOM
+      el.innerHTML = ""; // 清空容器舊有內容
+      const rows = parseCourses(raw); // 解析課程原始字串
+
+      rows.forEach(item=>{ // 遍歷每堂課程資料
+        const row = document.createElement("div"); // 建立一列課程的容器 div
+        row.className = "course-row"; // 設定課程列類別名稱
+
+        const title = document.createElement("div"); // 建立課名容器 div
+        title.textContent = item.title; // 填入課名文字內容
+
+        const speaker = document.createElement("div"); // 建立主講者容器 div
+        speaker.className = "course-speaker"; // 設定主講者類別名稱
+        speaker.textContent = item.speaker; // 填入主講者文字內容
+
+        row.appendChild(title); // 將課名插入列容器
+        row.appendChild(speaker); // 將主講者插入列容器
+        el.appendChild(row); // 將整列課程插入總列表容器
+      }); // 結束遍歷
+    } // 結束 renderCourses 函式
+
+    function clearRender(){ // 清空畫面上所有動態填入的欄位資料
+      [ // 需要清空的元素 ID 清單陣列
         "deity","ganzhi","year","month","day","days","className","organizer",
         "supervisor","mainLeader","leaders","studentM","studentF","studentT",
         "leaderM","leaderF","leaderT","insideM","insideF","outsideM","outsideF",
         "totalM","totalF","grandTotal","signer"
-      ].forEach(key=>setText(key,""));
+      ].forEach(key=>setText(key,"")); // 將上方每個 ID 的文字清空
 
-      renderCourses("");
-      renderLeave("sickList","");
-      renderLeave("personalList","");
-      fitStage();
-    }
+      renderCourses(""); // 清空課程列表
+      renderLeave("sickList",""); // 清空病假列表
+      renderLeave("personalList",""); // 清空事假列表
+      fitStage(); // 重新計算並微調舞台畫布縮放比例
+    } // 結束 clearRender 函式
 
-    function render(data){
-      [
+    function render(data){ // 根據傳入的資料物件渲染更新整個畫面
+      [ // 需要填入數值的元素 ID 清單陣列
         "deity","ganzhi","year","month","day","days","className","organizer",
         "supervisor","mainLeader","leaders","studentM","studentF","studentT",
         "leaderM","leaderF","leaderT","insideM","insideF","outsideM","outsideF",
         "totalM","totalF","grandTotal","signer"
-      ].forEach(key=>setText(key,data[key]));
+      ].forEach(key=>setText(key,data[key])); // 將 data 物件中的對應數值填入對應 ID 元素
 
-      renderCourses(data.courses);
-      renderLeave("sickList",data.sick);
-      renderLeave("personalList",data.personal);
-      fitStage();
-    }
+      renderCourses(data.courses); // 渲染課程區塊
+      renderLeave("sickList",data.sick); // 渲染病假區塊
+      renderLeave("personalList",data.personal); // 渲染事假區塊
+      fitStage(); // 重新計算畫布縮放比例
+    } // 結束 render 函式
 
-    function fitStage(){
-      const stage = document.getElementById("stage");
-      stage.style.transform = "scale(1)";
-      const scale = Math.min(
-        window.innerWidth / stage.offsetWidth,
-        window.innerHeight / stage.offsetHeight
-      ) * .995;
-      stage.style.transform = "scale(" + scale + ")";
-    }
+    function fitStage(){ // 動態計算畫面縮放比例，使 1600x900 畫布完全適應螢幕視窗
+      const stage = document.getElementById("stage"); // 取得 #stage 舞台畫布 DOM
+      stage.style.transform = "scale(1)"; // 先重置縮放比例為 1
+      const scale = Math.min( // 取寬度比與高度比的較小值，避免溢出視窗
+        window.innerWidth / stage.offsetWidth, // 視窗寬度 / 畫布實際寬度
+        window.innerHeight / stage.offsetHeight // 視窗高度 / 畫布實際高度
+      ) * .995; // 乘以 0.995 留出微小邊界安全空間
+      stage.style.transform = "scale(" + scale + ")"; // 套用 CSS transform 進行整體縮放
+    } // 結束 fitStage 函式
 
-    let sheetRefreshTimer = null;
+    let sheetRefreshTimer = null; // 定義用於存放自動定時刷新的 Timer ID
 
-    function setSourceStatus(text,type){
-      const status = document.getElementById("source-status");
-      status.textContent = text;
-      status.className = type || "";
-    }
+    function setSourceStatus(text,type){ // 更新畫面左下角的 Sheet 同步狀態提示資訊
+      const status = document.getElementById("source-status"); // 取得狀態提示容器 DOM
+      status.textContent = text; // 設定提示文字
+      status.className = type || ""; // 設定狀態類別名稱 (如 'ok' 或 'err')
+    } // 結束 setSourceStatus 函式
 
-    async function refreshFromSheet(){
-      setSourceStatus("● 正在同步 Google Sheet…","");
-      try{
-        const live = await readLiveSheetData();
+    async function refreshFromSheet(){ // 執行從 Google Sheet 同步最新資料的核心異步流程
+      setSourceStatus("● 正在同步 Google Sheet…",""); // 顯示同步中提示狀態
+      try{ // 嘗試同步
+        const live = await readLiveSheetData(); // 異步抓取 Google Sheet 最新資料
 
-        if(!live.className){
-          throw new Error("班名 C8 為空白");
-        }
+        if(!live.className){ // 檢查關鍵資料班名是否為空
+          throw new Error("班名 C8 為空白"); // 若無班名資料拋出例外
+        } // 結束檢查
 
-        render(live);
+        render(live); // 成功抓取資料後渲染更新畫面
 
-        const now = new Date();
-        const hh = String(now.getHours()).padStart(2,"0");
-        const mm = String(now.getMinutes()).padStart(2,"0");
-        const ss = String(now.getSeconds()).padStart(2,"0");
+        const now = new Date(); // 取得目前系統時間物件
+        const hh = String(now.getHours()).padStart(2,"0"); // 取得小時並補零為雙位數
+        const mm = String(now.getMinutes()).padStart(2,"0"); // 取得分鐘並補零為雙位數
+        const ss = String(now.getSeconds()).padStart(2,"0"); // 取得秒數並補零為雙位數
 
-        setSourceStatus("● Sheet 已同步 " + hh + ":" + mm + ":" + ss,"ok");
-      }catch(err){
-        console.error("Sheet sync failed:",err);
-        clearRender();
-        setSourceStatus("⚠ Sheet 同步失敗｜未顯示舊資料","err");
-      }
-    }
+        setSourceStatus("● Sheet 已同步 " + hh + ":" + mm + ":" + ss,"ok"); // 顯示同步成功的時間狀態
+      }catch(err){ // 抓取或解析失敗時
+        console.error("Sheet sync failed:",err); // 於控制台印出錯誤記錄
+        clearRender(); // 失敗時清空畫面，防範顯示過期不正確資料
+        setSourceStatus("⚠ Sheet 同步失敗｜未顯示舊資料","err"); // 顯示同步失敗警告狀態
+      } // 結束 try-catch
+    } // 結束 refreshFromSheet 函式
 
-    clearRender();
-    refreshFromSheet();
-    sheetRefreshTimer = setInterval(refreshFromSheet,30000);
-    window.addEventListener("resize",fitStage);
-  </script>
-</body>
-</html>
+    clearRender(); // 初始載入時先清空畫面
+    refreshFromSheet(); // 頁面載入時立即發起第一次從 Google Sheet 同步資料
+    sheetRefreshTimer = setInterval(refreshFromSheet,30000); // 設定每 30 秒 (30000 毫秒) 自動重新同步一次
+    window.addEventListener("resize",fitStage); // 監聽視窗大小改變 (resize) 事件，動態重新調整畫布縮放比
+  </script> <!-- 結束 JavaScript 腳本區塊 -->
+</body> <!-- 結束 body 區塊 -->
+</html> <!-- 結束 html 根標籤 -->
