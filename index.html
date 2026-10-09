@@ -39,7 +39,7 @@
     #stage{ /* 設定 ID 為 stage 的主要畫布容器樣式 */
       width:var(--stage-w); /* 設定畫布寬度為變數 1600px */
       height:var(--stage-h); /* 設定畫布高度為變數 900px */
-      padding:28px 42px 20px; /* 設定畫布內距：上 28px、左右 42px、下 20px */
+      padding:22px 48px 16px; /* 設定畫布內距：上 22px、左右 48px、下 16px (釋放垂直空間) */
       position:relative; /* 設定定位方式為相對定位，供子元素絕對定位使用 */
       transform-origin:center center; /* 設定 CSS Transform 縮放變形中心點為正中央 */
       overflow:hidden; /* 隱藏超出畫布範圍的內容 */
@@ -50,14 +50,14 @@
     .blue{color:var(--blue);font-weight:700} /* .blue 類別：文字設為藍色且粗體 */
 
     .hero{ /* .hero 頁首橫幅區塊樣式 */
-      height:176px; /* 設定區塊高度為 176px */
+      height:170px; /* 設定區塊高度為 170px */
       text-align:center; /* 區塊內文字設定為置中對齊 */
     } /* 結束 .hero 樣式區塊 */
 
     .title{ /* .title 大標題樣式 */
       margin:0; /* 清除標題預設外距 */
       color:var(--red); /* 標題文字顏色套用紅色變數 */
-      font-size:58px; /* 設定標題字體大小為 58px */
+      font-size:64px; /* 設定標題字體加大至 64px 提升視覺大氣感 */
       line-height:1; /* 設定行高為 1 倍 */
       letter-spacing:.88em; /* 設定字距為 0.88em 展現大氣排版 */
       padding-left:.88em; /* 左側推開 0.88em 內距以修正字距所造成的偏移 */
@@ -65,14 +65,14 @@
     } /* 結束 .title 樣式區塊 */
 
     .deity{ /* .deity 仙佛聖號區塊樣式 */
-      margin-top:13px; /* 設定上方外距 13px */
-      font-size:27px; /* 設定字體大小為 27px */
+      margin-top:12px; /* 設定上方外距 12px */
+      font-size:30px; /* 設定字體大小加大至 30px */
       line-height:1.1; /* 設定行高為 1.1 倍 */
     } /* 結束 .deity 樣式區塊 */
 
     .date-row{ /* .date-row 日期資訊行樣式 */
-      margin-top:14px; /* 設定上方外距 14px */
-      font-size:26px; /* 設定字體大小為 26px */
+      margin-top:12px; /* 設定上方外距 12px */
+      font-size:28px; /* 設定字體大小加大至 28px */
       line-height:1.2; /* 設定行高為 1.2 倍 */
       white-space:nowrap; /* 設定文字不換行 */
       text-align:center; /* 設定文字置中對齊 */
@@ -80,16 +80,16 @@
 
     .major-rule{ /* .major-rule 分隔紅線樣式 */
       position:relative; /* 定位方式設為相對定位 */
-      height:16px; /* 設定高度 16px */
+      height:14px; /* 設定高度 14px */
       border-top:3px solid var(--red); /* 設定上邊框為 3px 實線紅色 */
       margin-top:10px; /* 設定上方外距 10px */
     } /* 結束 .major-rule 樣式區塊 */
 
     .top-grid{ /* .top-grid 上方雙欄網格容器樣式 */
       display:grid; /* 使用 CSS Grid 網格佈局 */
-      grid-template-columns:1.08fr .92fr; /* 定義兩欄比例為 1.08 : 0.92 */
-      gap:38px; /* 設定網格間距為 38px */
-      height:326px; /* 設定容器高度為 326px */
+      grid-template-columns:1.12fr .88fr; /* 微調欄位比例讓班務資訊擁有更多寬度空間 */
+      gap:40px; /* 設定網格間距為 40px */
+      height:330px; /* 設定容器高度為 330px */
     } /* 結束 .top-grid 樣式區塊 */
 
     .section{ /* .section 通用章節樣式 */
@@ -100,20 +100,20 @@
       display:flex; /* 使用 Flexbox 彈性佈局 */
       align-items:center; /* 垂直置中對齊項目 */
       gap:10px; /* 設定元素間距為 10px */
-      height:42px; /* 設定標頭列高度為 42px */
-      margin-bottom:7px; /* 設定下方外距 7px */
+      height:44px; /* 設定標頭列高度為 44px */
+      margin-bottom:8px; /* 設定下方外距 8px */
     } /* 結束 .section-head 樣式區塊 */
 
     .section-badge{ /* .section-badge 章節標籤徽章樣式 */
       flex:0 0 auto; /* 保持原大小，不放大也不縮小 */
-      min-width:174px; /* 設定最小寬度 174px */
-      padding:5px 18px 6px; /* 設定內距：上5px 左右18px 下6px */
-      border-radius:15px; /* 設定圓角半徑為 15px */
+      min-width:184px; /* 設定最小寬度 184px */
+      padding:6px 20px 7px; /* 設定內距：上6px 左右20px 下7px */
+      border-radius:16px; /* 設定圓角半徑為 16px */
       background:var(--deep-red); /* 背景色套用深紅色變數 */
       border:2px solid var(--red); /* 邊框設為 2px 實線紅色 */
       box-shadow:inset 0 0 0 2px #ffd962; /* 內陰影模擬雙層金色細框線效果 */
       color:#fff6b6; /* 徽章文字顏色設為淺金黃色 */
-      font-size:24px; /* 設定字體大小 24px */
+      font-size:26px; /* 設定字體大小加大至 26px */
       line-height:1.05; /* 設定行高 1.05 */
       text-align:center; /* 文字置中對齊 */
       font-weight:700; /* 設定粗體 */
@@ -122,7 +122,7 @@
 
     .section-head::after{ /* 章節標頭尾端延伸紅線虛擬元素 */
       content:""; /* 虛擬元素內容設為空 */
-      height:2px; /* 設定橫線高度 2px */
+      height:3px; /* 設定橫線高度加大至 3px 更清晰 */
       background:var(--red); /* 背景色套用紅色變數 */
       flex:1; /* 彈性拉伸填滿剩餘寬度 */
     } /* 結束 .section-head::after 樣式區塊 */
@@ -139,17 +139,17 @@
     } /* 結束表格基礎樣式 */
 
     .class-table{ /* 班務表格專屬字體設定 */
-      font-size:23px; /* 字體大小 23px */
-      line-height:1.30; /* 行高 1.30 */
+      font-size:26px; /* 字體大小顯著加大至 26px */
+      line-height:1.35; /* 行高加大至 1.35 讓多行姓名不擁擠 */
     } /* 結束 .class-table 樣式區塊 */
 
     .class-table td{ /* 班務表格儲存格樣式 */
-      padding:4px 0; /* 上下內距 4px，左右 0 */
+      padding:5px 0; /* 上下內距 5px，左右 0 */
       vertical-align:top; /* 內容頂端對齊 */
     } /* 結束 .class-table td 樣式區塊 */
 
     .class-label{ /* 班務表格項目名稱標籤欄樣式 */
-      width:150px; /* 欄寬固定 150px */
+      width:132px; /* 欄寬縮減至 132px，將更多寬度分配給右側內容 */
       white-space:nowrap; /* 文字不換行 */
       color:var(--ink); /* 文字顏色套用墨黑色 */
     } /* 結束 .class-label 樣式區塊 */
@@ -162,101 +162,107 @@
     } /* 結束 .class-value 樣式區塊 */
 
     .stats{ /* .stats 人數統計區塊樣式 */
-      padding-left:28px; /* 設定左側內距 28px */
-      border-left:2px solid var(--red); /* 設定左側紅框線 2px */
+      padding-left:32px; /* 設定左側內距 32px */
+      border-left:3px solid var(--red); /* 設定左側紅框線加大至 3px */
       position:relative; /* 設定相對定位 */
     } /* 結束 .stats 樣式區塊 */
 
     .stats-table{ /* 人數統計表格專屬設定 */
-      font-size:24px; /* 字體大小 24px */
-      line-height:1.25; /* 行高 1.25 */
+      font-size:27px; /* 字體大小顯著加大至 27px */
+      line-height:1.3; /* 行高 1.3 */
     } /* 結束 .stats-table 樣式區塊 */
 
     .stats-table td{ /* 人數統計表格儲存格樣式 */
-      height:40px; /* 儲存格高度固定 40px */
-      padding:4px 3px; /* 內距：上下 4px、左右 3px */
+      height:44px; /* 儲存格高度固定 44px */
+      padding:5px 3px; /* 內距：上下 5px、左右 3px */
       vertical-align:middle; /* 內容垂直居中對齊 */
       white-space:nowrap; /* 文字不換行 */
     } /* 結束 .stats-table td 樣式區塊 */
 
-    .stats-label{width:150px} /* 人數統計項目名稱標籤欄寬 150px */
+    .stats-label{width:136px} /* 人數統計項目名稱標籤欄寬 136px */
 
     .num{ /* 數字顯示樣式 */
       color:var(--blue); /* 文字顏色套用藍色變數 */
       font-weight:700; /* 設為粗體 */
-      font-size:31px; /* 字體大小 31px */
+      font-size:35px; /* 數字字體顯著加大至 35px */
       display:inline-block; /* 轉為行內塊級元素以套用寬度 */
-      min-width:38px; /* 設定最小寬度 38px 對齊數字 */
+      min-width:42px; /* 設定最小寬度 42px 對齊數字 */
       text-align:center; /* 數字置中對齊 */
     } /* 結束 .num 樣式區塊 */
 
     .courses{ /* .courses 課程區塊樣式 */
-      height:112px; /* 高度固定 112px */
-      margin-top:2px; /* 上方外距 2px */
+      height:116px; /* 高度適當擴充至 116px */
+      margin-top:4px; /* 上方外距 4px */
       overflow:hidden; /* 溢出內容隱藏 */
     } /* 結束 .courses 樣式區塊 */
 
     .courses .section-head{ /* 課程區塊專屬標頭調整 */
-      margin-bottom:1px; /* 下方外距縮減至 1px */
+      margin-bottom:4px; /* 下方外距 4px */
     } /* 結束 .courses .section-head 樣式區塊 */
 
     .course-list{ /* 課程列表容器樣式 */
       margin-left:205px; /* 左側推開 205px 對齊標籤 */
-      margin-top:-3px; /* 上方外距向上微調 -3px */
+      margin-top:-2px; /* 上方外距向上微調 -2px */
       display:grid; /* 使用 CSS Grid 網格佈局 */
-      row-gap:1px; /* 列間距 1px */
+      row-gap:2px; /* 列間距 2px */
     } /* 結束 .course-list 樣式區塊 */
 
     .course-row{ /* 單條課程項目網格樣式 */
       display:grid; /* 使用 CSS Grid 網格佈局 */
-      grid-template-columns:minmax(0,1fr) 170px; /* 課名彈性佔滿，主講者固定 170px */
-      gap:18px; /* 課名與主講者之間間距 18px */
+      grid-template-columns:minmax(0,1fr) 180px; /* 課名彈性佔滿，主講者固定 180px */
+      gap:20px; /* 課名與主講者之間間距 20px */
       align-items:baseline; /* 文字基準線對齊 */
-      font-size:23px; /* 字體大小 23px */
-      line-height:1.28; /* 行高 1.28 */
+      font-size:26px; /* 字體大小加大至 26px */
+      line-height:1.3; /* 行高 1.3 */
       color:var(--blue); /* 文字顏色套用藍色變數 */
       font-weight:700; /* 設為粗體 */
-      max-width:930px; /* 設定最大寬度 930px */
+      max-width:950px; /* 設定最大寬度 950px */
     } /* 結束 .course-row 樣式區塊 */
 
     .course-speaker{ /* 課程主講者樣式 */
       white-space:nowrap; /* 主講者姓名不換行 */
     } /* 結束 .course-speaker 樣式區塊 */
 
+    .course-empty{ /* 無課程時顯示的空資料文字樣式 */
+      margin-left:205px; /* 左側推開對齊欄位 */
+      font-size:24px; /* 字體大小 24px */
+      color:var(--ink); /* 文字顏色墨黑 */
+    } /* 結束 .course-empty 樣式區塊 */
+
     .notes{ /* .notes 備註（請假名單）區塊樣式 */
-      height:224px; /* 區塊高度固定 224px */
+      height:228px; /* 區塊高度擴充至 228px */
       overflow:hidden; /* 溢出內容隱藏 */
       position:relative; /* 相對定位，供落款叩呈絕對定位 */
-      padding-bottom:42px; /* 底部留白 42px 預留落款空間 */
+      padding-bottom:46px; /* 底部留白 46px 預留落款空間 */
     } /* 結束 .notes 樣式區塊 */
 
     .notes .section-head{ /* 備註區塊專屬標頭調整 */
-      margin-bottom:5px; /* 下方外距 5px */
+      margin-bottom:6px; /* 下方外距 6px */
     } /* 結束 .notes .section-head 樣式區塊 */
 
     .leave-row{ /* 請假名單單行容器樣式 */
       display:grid; /* 使用 CSS Grid 網格佈局 */
-      grid-template-columns:92px 1fr; /* 左邊類別標籤 92px，右邊名單佔滿 */
+      grid-template-columns:98px 1fr; /* 左邊類別標籤 98px，右邊名單佔滿 */
       align-items:start; /* 頂端對齊 */
-      column-gap:8px; /* 欄間距 8px */
-      margin-bottom:4px; /* 下方外距 4px */
+      column-gap:10px; /* 欄間距 10px */
+      margin-bottom:6px; /* 下方外距 6px */
     } /* 結束 .leave-row 樣式區塊 */
 
     .leave-label{ /* 請假類別標籤樣式 (如：病假、事假) */
-      font-size:21px; /* 字體大小 21px */
-      line-height:1.3; /* 行高 1.3 */
+      font-size:24px; /* 字體大小顯著加大至 24px */
+      line-height:1.35; /* 行高 1.35 */
       font-weight:700; /* 設為粗體 */
       white-space:nowrap; /* 文字不換行 */
     } /* 結束 .leave-label 樣式區塊 */
 
     .leave-grid{ /* 請假人員名單多欄網格容器樣式 */
       display:grid; /* 使用 CSS Grid 網格佈局 */
-      grid-template-columns:repeat(10,minmax(0,1fr)); /* 預設分為 10 欄均分寬度 */
-      gap:2px 9px; /* 網格間距：上下 2px、左右 9px */
+      grid-template-columns:repeat(6,minmax(0,1fr)); /* 預設改為 6 欄大幅增加每個名字空間與清晰度 */
+      gap:6px 16px; /* 增加網格間距：上下 6px、左右 16px 告別擁擠感 */
       color:var(--blue); /* 文字顏色套用藍色變數 */
       font-weight:700; /* 設為粗體 */
-      font-size:17px; /* 字體大小 17px */
-      line-height:1.25; /* 行高 1.25 */
+      font-size:21px; /* 預設字體顯著加大至 21px (原 17px) */
+      line-height:1.35; /* 行高 1.35 */
       min-width:0; /* 防止子元素溢出 */
     } /* 結束 .leave-grid 樣式區塊 */
 
@@ -269,14 +275,14 @@
     .leave-empty{ /* 無人請假時的無資料顯示樣式 */
       color:var(--ink); /* 文字顏色套用墨黑色 */
       font-weight:400; /* 設為一般字體粗細 */
-      font-size:19px; /* 字體大小 19px */
+      font-size:22px; /* 字體大小加大至 22px */
     } /* 結束 .leave-empty 樣式區塊 */
 
     .signature{ /* 弟子叩呈落款樣式 */
       position:absolute; /* 絕對定位於區塊右下角 */
-      right:6px; /* 靠右 6px */
-      bottom:4px; /* 靠下 4px */
-      font-size:24px; /* 字體大小 24px */
+      right:8px; /* 靠右 8px */
+      bottom:6px; /* 靠下 6px */
+      font-size:28px; /* 字體大小顯著加大至 28px */
       line-height:1; /* 行高 1 */
       white-space:nowrap; /* 文字不換行 */
       text-align:right; /* 右對齊 */
@@ -552,8 +558,8 @@
       } // 結束無資料判斷
 
       const count = items.length; // 取得請假總人數
-      const cols = count > 70 ? 11 : count > 55 ? 10 : count > 40 ? 9 : count > 24 ? 8 : 6; // 根據人數動態計算網格欄數 (6~11欄)
-      const size = count > 70 ? 15.5 : count > 55 ? 16.5 : count > 40 ? 17 : 18; // 根據人數動態微調字型大小 (15.5px~18px)
+      const cols = count > 70 ? 10 : count > 50 ? 8 : count > 30 ? 7 : count > 15 ? 6 : 5; // 根據人數動態計算網格欄數，給予每個名字充裕顯示空間
+      const size = count > 70 ? 17 : count > 50 ? 18.5 : count > 30 ? 20 : 21.5; // 動態調整字型大小，大幅提升辨識度
       el.style.gridTemplateColumns = "repeat(" + cols + ", minmax(0,1fr))"; // 設定 CSS Grid 的列欄位數與寬度分配
       el.style.fontSize = size + "px"; // 動態套用計算後的字型大小
 
@@ -608,6 +614,14 @@
       const el = document.getElementById("courseList"); // 取得課程容器 DOM
       el.innerHTML = ""; // 清空容器舊有內容
       const rows = parseCourses(raw); // 解析課程原始字串
+
+      if(!rows.length){ // 若無課程資料
+        const empty = document.createElement("div"); // 建立無課程提示元素
+        empty.className = "course-empty"; // 指定無課程顯示類別
+        empty.textContent = "—"; // 顯示破折號「—」代表無課程
+        el.appendChild(empty); // 插入容器中
+        return; // 結束函式執行
+      } // 結束無課程判斷
 
       rows.forEach(item=>{ // 遍歷每堂課程資料
         const row = document.createElement("div"); // 建立一列課程的容器 div
