@@ -39,7 +39,7 @@
     #stage{ /* 設定 ID 為 stage 的主要畫布容器樣式 */
       width:var(--stage-w); /* 設定畫布寬度為變數 1680px */
       height:var(--stage-h); /* 設定畫布高度為變數 900px */
-      padding:20px 24px 16px; /* 縮減左右內距至 24px，將內容最大化往左右兩側延展 */
+      padding:18px 12px 14px; /* 內距左右縮減至極致的 12px，使內容紅線與元件最大化貼近螢幕邊緣 */
       position:relative; /* 設定定位方式為相對定位，供子元素絕對定位使用 */
       transform-origin:center center; /* 設定 CSS Transform 縮放變形中心點為正中央 */
       overflow:hidden; /* 隱藏超出畫布範圍的內容 */
@@ -87,8 +87,8 @@
 
     .top-grid{ /* .top-grid 上方雙欄網格容器樣式 */
       display:grid; /* 使用 CSS Grid 網格佈局 */
-      grid-template-columns:1fr 1fr; /* 平分兩欄寬度，確保左右兩邊均有極充裕顯示空間 */
-      gap:44px; /* 設定兩欄間距為 44px，推開兩側內容 */
+      grid-template-columns:1fr 1fr; /* 平分兩欄寬度 */
+      gap:52px; /* 加大兩欄間距至 52px，將班務與人數統計大幅往左右兩邊推開 */
       height:330px; /* 設定容器高度為 330px */
     } /* 結束 .top-grid 樣式區塊 */
 
@@ -674,13 +674,13 @@
       fitStage(); // 重新計算畫布縮放比例
     } // 結束 render 函式
 
-    function fitStage(){ // 動態計算畫面縮放比例，使 1600x900 畫布完全適應螢幕視窗
+    function fitStage(){ // 動態計算畫面縮放比例，使 1680x900 畫布完全適應螢幕視窗
       const stage = document.getElementById("stage"); // 取得 #stage 舞台畫布 DOM
       stage.style.transform = "scale(1)"; // 先重置縮放比例為 1
-      const scale = Math.min( // 取寬度比與高度比的較小值，避免溢出視窗
+      const scale = Math.min( // 取寬度比與高度比的較小值，使畫布完全滿版無邊界空間
         window.innerWidth / stage.offsetWidth, // 視窗寬度 / 畫布實際寬度
         window.innerHeight / stage.offsetHeight // 視窗高度 / 畫布實際高度
-      ) * .995; // 乘以 0.995 留出微小邊界安全空間
+      ); // 滿版縮放
       stage.style.transform = "scale(" + scale + ")"; // 套用 CSS transform 進行整體縮放
     } // 結束 fitStage 函式
 
