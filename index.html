@@ -39,7 +39,7 @@
     #stage{ /* 設定 ID 為 stage 的主要畫布容器樣式 */
       width:var(--stage-w); /* 設定畫布寬度 */
       height:var(--stage-h); /* 設定畫布高度 */
-      padding:16px 20px 14px; /* 設定畫布內距 */
+      padding:16px 24px 22px; /* 設定畫布內距：上16px 左右24px 下22px 留出充裕防遮邊距 */
       position:relative; /* 設定定位方式為相對定位，供子元素絕對定位使用 */
       transform-origin:center center; /* 設定 CSS Transform 縮放變形中心點為正中央 */
       overflow:hidden; /* 隱藏超出畫布範圍的內容 */
@@ -261,8 +261,8 @@
 
     .leave-grid{ /* 請假人員名單多欄網格容器樣式 */
       display:grid; /* 使用 CSS Grid 網格佈局 */
-      grid-template-columns:repeat(6,minmax(0,1fr)); /* 6 欄平分寬度 */
-      gap:6px 16px; /* 增加網格間距：上下 6px、左右 16px */
+      grid-template-columns:repeat(auto-fill,minmax(185px,1fr)); /* 自動依寬度填滿欄位，確保每欄至少 185px 絕不遮字裁切 */
+      gap:6px 16px; /* 網格間距：上下 6px、左右 16px */
       color:var(--blue); /* 文字顏色套用藍色變數 */
       font-weight:700; /* 設為粗體 */
       font-size:21px; /* 預設字體 21px */
@@ -272,8 +272,7 @@
 
     .leave-item{ /* 單個請假人員名字項目樣式 */
       white-space:nowrap; /* 人名不換行 */
-      overflow:hidden; /* 溢出字串隱藏 */
-      text-overflow:ellipsis; /* 溢出時呈現省略符號，絕不遮字重疊 */
+      overflow:visible; /* 允許文字完整呈現，絕不裁切或呈現點點點 ... */
     } /* 結束 .leave-item 樣式區塊 */
 
     .leave-empty{ /* 無人請假時的無資料顯示樣式 */
@@ -284,7 +283,7 @@
 
     .signature{ /* 弟子叩呈落款樣式 */
       margin-top:auto; /* 自動向上推開緊貼最下方，徹底解決落款與請假名單疊字問題 */
-      padding-top:4px; /* 上方邊距 4px */
+      padding-top:8px; /* 上方邊距 8px */
       font-size:28px; /* 字體大小顯著加大至 28px */
       line-height:1; /* 行高 1 */
       white-space:nowrap; /* 文字不換行 */
@@ -567,9 +566,9 @@
       } // 結束無資料判斷
 
       const count = items.length; // 取得請假總人數
-      const cols = count > 70 ? 10 : count > 50 ? 8 : count > 30 ? 7 : count > 15 ? 6 : 5; // 根據人數動態計算網格欄數，給予每個名字充裕顯示空間
+      const minWidth = count > 70 ? 140 : count > 50 ? 155 : count > 30 ? 170 : 185; // 動態計算欄位最小寬度，給予長人名（如 7 字以上）充裕空間，絕不產生點點點裁切
       const size = count > 70 ? 17 : count > 50 ? 18.5 : count > 30 ? 20 : 21.5; // 動態調整字型大小，大幅提升辨識度
-      el.style.gridTemplateColumns = "repeat(" + cols + ", minmax(0,1fr))"; // 設定 CSS Grid 的列欄位數與寬度分配
+      el.style.gridTemplateColumns = "repeat(auto-fill, minmax(" + minWidth + "px, 1fr))"; // 設定 CSS Grid 的自適應寬度欄位
       el.style.fontSize = size + "px"; // 動態套用計算後的字型大小
 
       items.forEach(item=>{ // 遍歷請假人員姓名陣列
@@ -677,13 +676,26 @@
       fitStage(); // 重新計算畫布縮放比例
     } // 結束 render 函式
 
-    function fitStage(){ // 動態計算畫面縮放比例，使 1680x900 畫布完全適應螢幕視窗
+    function fitStage(){ // 動態計算畫面縮放比例，使畫布完全適應螢幕視窗且不裁切邊界
       const stage = document.getElementById("stage"); // 取得 #stage 舞台畫布 DOM
       stage.style.transform = "scale(1)"; // 先重置縮放比例為 1
-      const scale = Math.min( // 取寬度比與高度比的較小值，使畫布完全滿版無邊界空間
-        window.innerWidth / stage.offsetWidth, // 視窗寬度 / 畫布實際寬度
-        window.innerHeight / stage.offsetHeight // 視窗高度 / 畫布實際高度
-      ); // 滿版縮放
+      const vw = window.innerWidth; // 取得瀏覽器視窗寬度
+      const vh = window.innerHeight; // 取得瀏覽器視窗高度
+
+      const screenRatio = vw / vh; // 計算視窗長寬比例
+      if (screenRatio < 1.6) { // 若為 iPad 等 4:3 比例平板
+        document.documentElement.style.setProperty("--stage-w", "1500px"); // 設定 4:3 適合畫布寬度 1500px
+        document.documentElement.style.setProperty("--stage-h", "920px"); // 設定 4:3 適合畫布高度 920px
+      } else { // 若為寬螢幕
+        document.documentElement.style.setProperty("--stage-w", "1680px"); // 設定寬螢幕畫布寬度 1680px
+        document.documentElement.style.setProperty("--stage-h", "900px"); // 設定寬螢幕畫布高度 900px
+      }
+
+      const safeMargin = 16; // 保留 16px 邊界安全邊距，確保在任何平板瀏覽器工具列下絕不觸底裁切
+      const scale = Math.min( // 計算全滿版安全縮放比
+        (vw - safeMargin * 2) / stage.offsetWidth, // 寬度安全縮放比
+        (vh - safeMargin * 2) / stage.offsetHeight // 高度安全縮放比
+      ); // 取兩者較小值
       stage.style.transform = "scale(" + scale + ")"; // 套用 CSS transform 進行整體縮放
     } // 結束 fitStage 函式
 
