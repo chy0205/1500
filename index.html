@@ -14,7 +14,7 @@
       --deep-red:#a80000; /* 全域深紅色調變數 */
       --blue:#063dff; /* 全域藍色重點調變數 */
       --ink:#111; /* 全域墨黑內文色變數 */
-      --stage-w:1600px; /* 定義舞台畫布目標寬度 1600px */
+      --stage-w:1680px; /* 將舞台畫布目標寬度由 1600px 擴展至 1680px 讓整體左右更寬廣大氣 */
       --stage-h:900px; /* 定義舞台畫布目標高度 900px */
     } /* 結束根節點 CSS 變數定義 */
 
@@ -37,9 +37,9 @@
     } /* 結束 body 樣式區塊 */
 
     #stage{ /* 設定 ID 為 stage 的主要畫布容器樣式 */
-      width:var(--stage-w); /* 設定畫布寬度為變數 1600px */
+      width:var(--stage-w); /* 設定畫布寬度為變數 1680px */
       height:var(--stage-h); /* 設定畫布高度為變數 900px */
-      padding:22px 48px 16px; /* 設定畫布內距：上 22px、左右 48px、下 16px (釋放垂直空間) */
+      padding:20px 24px 16px; /* 縮減左右內距至 24px，將內容最大化往左右兩側延展 */
       position:relative; /* 設定定位方式為相對定位，供子元素絕對定位使用 */
       transform-origin:center center; /* 設定 CSS Transform 縮放變形中心點為正中央 */
       overflow:hidden; /* 隱藏超出畫布範圍的內容 */
@@ -88,7 +88,7 @@
     .top-grid{ /* .top-grid 上方雙欄網格容器樣式 */
       display:grid; /* 使用 CSS Grid 網格佈局 */
       grid-template-columns:1fr 1fr; /* 平分兩欄寬度，確保左右兩邊均有極充裕顯示空間 */
-      gap:32px; /* 設定網格間距為 32px */
+      gap:44px; /* 設定兩欄間距為 44px，推開兩側內容 */
       height:330px; /* 設定容器高度為 330px */
     } /* 結束 .top-grid 樣式區塊 */
 
