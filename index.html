@@ -37,13 +37,16 @@
     } /* 結束 body 樣式區塊 */
 
     #stage{ /* 設定 ID 為 stage 的主要畫布容器樣式 */
-      width:var(--stage-w); /* 設定畫布寬度為變數 1680px */
-      height:var(--stage-h); /* 設定畫布高度為變數 900px */
-      padding:18px 12px 14px; /* 內距左右縮減至極致的 12px，使內容紅線與元件最大化貼近螢幕邊緣 */
+      width:var(--stage-w); /* 設定畫布寬度 */
+      height:var(--stage-h); /* 設定畫布高度 */
+      padding:16px 20px 14px; /* 設定畫布內距 */
       position:relative; /* 設定定位方式為相對定位，供子元素絕對定位使用 */
       transform-origin:center center; /* 設定 CSS Transform 縮放變形中心點為正中央 */
       overflow:hidden; /* 隱藏超出畫布範圍的內容 */
       background:var(--gold); /* 畫布背景色套用金色變數 */
+      display:flex; /* 使用 Flexbox 彈性盒佈局 */
+      flex-direction:column; /* 設定直向垂直排列 */
+      justify-content:space-between; /* 均勻分配各大區塊垂直間距，極致利用垂直空間 */
     } /* 結束 #stage 樣式區塊 */
 
     .red{color:var(--red);font-weight:700} /* .red 類別：文字設為紅色且粗體 */
@@ -230,10 +233,11 @@
     } /* 結束 .course-empty 樣式區塊 */
 
     .notes{ /* .notes 備註（請假名單）區塊樣式 */
-      height:228px; /* 區塊高度擴充至 228px */
-      overflow:hidden; /* 溢出內容隱藏 */
-      position:relative; /* 相對定位，供落款叩呈絕對定位 */
-      padding-bottom:46px; /* 底部留白 46px 預留落款空間 */
+      flex:1 1 auto; /* 彈性拉伸填滿剩餘高度 */
+      display:flex; /* 使用 Flexbox 彈性佈局 */
+      flex-direction:column; /* 設定直向垂直排列 */
+      min-height:220px; /* 最小高度 220px */
+      position:relative; /* 相對定位 */
     } /* 結束 .notes 樣式區塊 */
 
     .notes .section-head{ /* 備註區塊專屬標頭調整 */
@@ -257,11 +261,11 @@
 
     .leave-grid{ /* 請假人員名單多欄網格容器樣式 */
       display:grid; /* 使用 CSS Grid 網格佈局 */
-      grid-template-columns:repeat(6,minmax(0,1fr)); /* 預設改為 6 欄大幅增加每個名字空間與清晰度 */
-      gap:6px 16px; /* 增加網格間距：上下 6px、左右 16px 告別擁擠感 */
+      grid-template-columns:repeat(6,minmax(0,1fr)); /* 6 欄平分寬度 */
+      gap:6px 16px; /* 增加網格間距：上下 6px、左右 16px */
       color:var(--blue); /* 文字顏色套用藍色變數 */
       font-weight:700; /* 設為粗體 */
-      font-size:21px; /* 預設字體顯著加大至 21px (原 17px) */
+      font-size:21px; /* 預設字體 21px */
       line-height:1.35; /* 行高 1.35 */
       min-width:0; /* 防止子元素溢出 */
     } /* 結束 .leave-grid 樣式區塊 */
@@ -269,7 +273,7 @@
     .leave-item{ /* 單個請假人員名字項目樣式 */
       white-space:nowrap; /* 人名不換行 */
       overflow:hidden; /* 溢出字串隱藏 */
-      text-overflow:clip; /* 溢出時裁切 */
+      text-overflow:ellipsis; /* 溢出時呈現省略符號，絕不遮字重疊 */
     } /* 結束 .leave-item 樣式區塊 */
 
     .leave-empty{ /* 無人請假時的無資料顯示樣式 */
@@ -279,9 +283,8 @@
     } /* 結束 .leave-empty 樣式區塊 */
 
     .signature{ /* 弟子叩呈落款樣式 */
-      position:absolute; /* 絕對定位於區塊右下角 */
-      right:8px; /* 靠右 8px */
-      bottom:6px; /* 靠下 6px */
+      margin-top:auto; /* 自動向上推開緊貼最下方，徹底解決落款與請假名單疊字問題 */
+      padding-top:4px; /* 上方邊距 4px */
       font-size:28px; /* 字體大小顯著加大至 28px */
       line-height:1; /* 行高 1 */
       white-space:nowrap; /* 文字不換行 */
