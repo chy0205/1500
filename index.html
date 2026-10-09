@@ -87,8 +87,8 @@
 
     .top-grid{ /* .top-grid 上方雙欄網格容器樣式 */
       display:grid; /* 使用 CSS Grid 網格佈局 */
-      grid-template-columns:1.12fr .88fr; /* 微調欄位比例讓班務資訊擁有更多寬度空間 */
-      gap:40px; /* 設定網格間距為 40px */
+      grid-template-columns:1fr 1fr; /* 平分兩欄寬度，確保左右兩邊均有極充裕顯示空間 */
+      gap:32px; /* 設定網格間距為 32px */
       height:330px; /* 設定容器高度為 330px */
     } /* 結束 .top-grid 樣式區塊 */
 
@@ -162,31 +162,31 @@
     } /* 結束 .class-value 樣式區塊 */
 
     .stats{ /* .stats 人數統計區塊樣式 */
-      padding-left:32px; /* 設定左側內距 32px */
+      padding-left:28px; /* 設定左側內距 28px */
       border-left:3px solid var(--red); /* 設定左側紅框線加大至 3px */
       position:relative; /* 設定相對定位 */
     } /* 結束 .stats 樣式區塊 */
 
     .stats-table{ /* 人數統計表格專屬設定 */
-      font-size:27px; /* 字體大小顯著加大至 27px */
+      font-size:26px; /* 字體大小設為 26px */
       line-height:1.3; /* 行高 1.3 */
     } /* 結束 .stats-table 樣式區塊 */
 
     .stats-table td{ /* 人數統計表格儲存格樣式 */
       height:44px; /* 儲存格高度固定 44px */
-      padding:5px 3px; /* 內距：上下 5px、左右 3px */
+      padding:5px 2px; /* 內距：上下 5px、左右 2px */
       vertical-align:middle; /* 內容垂直居中對齊 */
       white-space:nowrap; /* 文字不換行 */
     } /* 結束 .stats-table td 樣式區塊 */
 
-    .stats-label{width:136px} /* 人數統計項目名稱標籤欄寬 136px */
+    .stats-label{width:130px} /* 人數統計項目名稱標籤欄寬 130px */
 
     .num{ /* 數字顯示樣式 */
       color:var(--blue); /* 文字顏色套用藍色變數 */
       font-weight:700; /* 設為粗體 */
-      font-size:35px; /* 數字字體顯著加大至 35px */
+      font-size:33px; /* 數字字體設為 33px */
       display:inline-block; /* 轉為行內塊級元素以套用寬度 */
-      min-width:42px; /* 設定最小寬度 42px 對齊數字 */
+      min-width:36px; /* 設定最小寬度 36px 對齊數字 */
       text-align:center; /* 數字置中對齊 */
     } /* 結束 .num 樣式區塊 */
 
@@ -343,6 +343,12 @@
       <div class="section stats"> <!-- 右側人數統計容器 -->
         <div class="section-head"><div class="section-badge">人數統計</div></div> <!-- 章節標題徽章：「人數統計」 -->
         <table class="stats-table"> <!-- 人數統計數據表格 -->
+          <colgroup> <!-- 設定欄位顯式寬度分配，防範文字擠壓疊字 -->
+            <col style="width:130px;"> <!-- 第一欄：項目名稱標籤寬度 -->
+            <col style="width:145px;"> <!-- 第二欄：乾道數據寬度 -->
+            <col style="width:145px;"> <!-- 第三欄：坤道數據寬度 -->
+            <col style="width:145px;"> <!-- 第四欄：小計數據寬度 -->
+          </colgroup> <!-- 結束 colgroup 設定 -->
           <tr> <!-- 第一行：班員人數統計 -->
             <td class="stats-label">班　　員：</td> <!-- 項目名稱：班員 -->
             <td>乾 <span id="studentM" class="num"></span> 名</td> <!-- 乾道班員人數 (動態填入) -->
